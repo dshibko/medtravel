@@ -2,6 +2,9 @@
 
 namespace Application\Manager;
 
+use Application\DAO\ClinicDAO;
+use Application\DAO\DoctorDAO;
+use Application\DAO\ServiceDAO;
 use \Application\Entity\User;
 use \Application\DAO\UserDAO;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -52,5 +55,35 @@ class ApplicationManager extends BasicManager {
     public function encryptPassword($password, $salt = null)
     {
         return md5($password);
+    }
+
+    public function prepareFormServices() {
+        $services = ServiceDAO::getInstance($this->getServiceLocator())->getAllServices(true);
+        $result = array();
+        foreach ($services as $service) {
+            $result[$service['id']] = $service['name'];
+        }
+
+        return $result;
+    }
+
+    public function prepareFormClinics() {
+        $clinics = ClinicDAO::getInstance($this->getServiceLocator())->getAllClinics(true);
+        $result = array();
+        foreach ($clinics as $clinic) {
+            $result[$clinic['id']] = $clinic['name'];
+        }
+
+        return $result;
+    }
+
+    public function prepareFormDoctors() {
+        $doctors = DoctorDAO::getInstance($this->getServiceLocator())->getDoctorsWithClinics();
+        $result = array();
+        foreach ($doctors as $doctor) {
+            $result[$doctor->getClinic()->getId()][$doctor->getId()] = $doctor->getName();
+        }
+
+        return $result;
     }
 }

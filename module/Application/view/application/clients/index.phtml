@@ -1,0 +1,50 @@
+<div class="">
+    <h1 class="page-header">Клиенты</h1>
+    <div class="table-responsive">
+        <?php if (!empty($this->clients)) : ?>
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ФИО</th>
+                    <th>Услуга</th>
+                    <th>Дата обращения</th>
+                    <th>Статус</th>
+                    <th>Страна</th>
+                    <th>Клиника</th>
+                    <th>Врач</th>
+                    <th>Дата Добавления</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($this->clients as $client) : ?>
+                        <tr>
+                            <td style="width: 15px;"><?=$client->getId(); ?></td>
+                            <td><?=$client->getFio(); ?></td>
+                            <td><?=$client->getService()->getName(); ?></td>
+                            <td><?=$client->getDOS()->format('d-M-Y'); ?></td>
+                            <td><?=$client->getStatus(); ?></td>
+                            <td><?=$client->getCountry(); ?></td>
+                            <td><?=$client->getClinic()->getName(); ?></td>
+                            <td><?=$client->getDoctor()->getName(); ?></td>
+                            <td><?=$client->getDateAdded()->format('d-M-Y'); ?></td>
+                            <td style="width: 40px;">
+                                <a href="/users/edit/<?=$client->getId()?>"><span class="label label-info">Редактировать</span></a>
+                                <!--<br>
+                                <?php /*if ($this->getCurrentUser()->getId() != $user->getId()) : */?>
+                                    <a href="/users/delete/<?/*=$user->getId()*/?>" onClick="return confirm('Подтвердите удаление пользователя')">
+                                        <span class="label label-danger">Удалить</span>
+                                    </a>
+                                --><?php /*endif; */?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else : echo 'Нет клиентов<br>'; endif; ?>
+        <a href="/clients/add">
+            <button type="button" class="btn btn-lg btn-primary">Добавить клиента</button>
+        </a>
+    </div>
+</div>

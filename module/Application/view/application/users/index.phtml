@@ -1,0 +1,39 @@
+<div class="">
+    <h1 class="page-header">Пользователи системы</h1>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->users as $user) : ?>
+                    <tr>
+                        <td style="width: 15px;"><?=$user->getId(); ?></td>
+                        <td><?=$user->getDisplayName(); ?></td>
+                        <td><?=$user->getEmail(); ?></td>
+                        <td><?=$user->getRole()->getName(); ?></td>
+                        <td style="width: 40px;">
+                            <a href="/users/edit/<?=$user->getId()?>"><span class="label label-info">Редактировать</span></a>
+                            <!--<br>
+                            <?php /*if ($this->getCurrentUser()->getId() != $user->getId()) : */?>
+                                <a href="/users/delete/<?/*=$user->getId()*/?>" onClick="return confirm('Подтвердите удаление пользователя')">
+                                    <span class="label label-danger">Удалить</span>
+                                </a>
+                            --><?php /*endif; */?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <a href="/users/add">
+            <button type="button" class="btn btn-lg btn-primary">Добавить пользователя</button>
+        </a>
+    </div>
+</div>

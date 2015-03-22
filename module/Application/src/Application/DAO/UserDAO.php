@@ -74,7 +74,17 @@ class UserDAO extends AbstractDAO {
             ->from($this->getRepositoryName(), 'u')
             ->join('u.role', 'r')
             ->where($qb->expr()->in('r.name',':roles'))->setParameter('roles', $roles)
-            ->orderBy('u.firstName','ASC');
+            ->orderBy('u.role','ASC');
+        return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
+    }
+
+    public function getAllUsers($hydrate = false)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('u, r')
+            ->from($this->getRepositoryName(), 'u')
+            ->join('u.role', 'r')
+            ->orderBy('u.id','ASC');
         return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
     }
 

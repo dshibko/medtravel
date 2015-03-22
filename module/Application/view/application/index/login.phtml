@@ -1,5 +1,5 @@
 <?php
-$title = '';
+$title = 'Вход';
 $this->headTitle($title);
 
 $form = $this->form;
@@ -13,18 +13,12 @@ echo $this->form()->openTag($form);
 $elements = $form->getElements();
 $inputs = array($elements['email'], $elements['password']);
 ?>
-<h3 class="form-title"><?php echo $this->escapeHtml($title); ?></h3>
+<h3 class="form-signin-heading"><?php echo $this->escapeHtml($title); ?></h3>
 <?php print $this->renderMessages(true, true); ?>
 <?php foreach ($inputs as $input) : ?>
     <div class="control-group">
-        <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-        <label class="control-label visible-ie8 visible-ie9"><?=$input->getLabel()?></label>
-        <div class="controls">
-            <div class="input-icon left">
-                <i class="<?=$input->getAttribute('icon')?>"></i>
-                <input class="m-wrap placeholder-no-fix" type="<?=$input->getAttribute('type')?>" placeholder="<?=$input->getAttribute('placeholder')?>" name="<?=$input->getAttribute('name')?>"/>
-            </div>
-        </div>
+        <label class="sr-only"><?=$input->getLabel()?></label>
+        <input class="form-control" type="<?=$input->getAttribute('type')?>" placeholder="<?=$input->getAttribute('placeholder')?>" name="<?=$input->getAttribute('name')?>"/>
     </div>
 <?php endforeach; ?>
 

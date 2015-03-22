@@ -10,14 +10,19 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-
+function pr($data){
+    echo '<pre>';
+    print_r($data);
+    echo '<pre>';
+    die();
+}
 return array(
     'doctrine' => array(
         'connection' => array(
             'orm_default' => array(
                 'driverClass' =>'Doctrine\DBAL\Driver\PDOMySql\Driver',
                 'params' => array(
-                    'host'     => 'localhost',
+                    'host'     => '127.0.0.1',
                     'port'     => '3306',
                     'user'     => 'root',
                     'password' => '123',

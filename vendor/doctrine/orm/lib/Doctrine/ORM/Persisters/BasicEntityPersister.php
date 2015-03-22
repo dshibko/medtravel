@@ -856,7 +856,7 @@ class BasicEntityPersister
     }
 
     /**
-     * Loads Entity matching the given Criteria object.
+     * Loads Entities matching the given Criteria object.
      *
      * @param \Doctrine\Common\Collections\Criteria $criteria
      *

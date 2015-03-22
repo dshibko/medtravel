@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/usr/bin/guake", line 1430, in <module>
+    gtk.main()
+KeyboardInterrupt

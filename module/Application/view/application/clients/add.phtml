@@ -1,0 +1,93 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+
+echo $this->form()->openTag($form);
+$elements = $form->getElements();
+$inputs = $elements;//array($elements['displayName'], $elements['email'], $elements['password']);
+$errors  = $form->getInputFilter()->getMessages();
+$messages = $form->getMessages();
+?>
+<script>
+    $(document).ready(function() {
+        $('.datepicker').datepick({dateFormat: 'dd-M-yyyy'});
+
+        $('select[name=clinic]').bind('change', function() {
+            var clinic =  $('select[name=clinic] option:selected').val();
+            var doctorsElems = $('#doc-clinic-'+clinic).find('span');
+            $('select[name=doctor]').html('');
+            var options = '';
+            $.each(doctorsElems, function(key, val) {
+                 options += '<option value="'+$(val).data("id")+'">'+$(val).data("name")+'</option>';
+            });
+
+            $('select[name=doctor]').html(options);
+        });
+
+        $('.add-attach').bind('click', function() {
+            var input = $(this).parent().find('input').first().clone();
+            $(this).before(input);
+        });
+
+        $('select[name=clinic]').trigger('change');
+    });
+</script>
+<h1 class="page-header">
+    Добавление клиента
+</h1>
+<div class="tools">
+    <a class="<?php echo !empty($errors) ?  'collapse' : 'expand';?>" href="javascript:;"></a>
+</div>
+<form role="form">
+    <?php foreach ($inputs as $element) : ?>
+        <?php if(isset($messages[$element->getName()])) : ?>
+            <div class="alert alert-danger">
+                <strong><?=$element->getLabel();?>:</strong>
+                <?php foreach ($messages[$element->getName()] as $error)
+                    echo $error;
+                ?>
+            </div>
+        <?php endif; ?>
+        <div class="form-group input-group">
+            <?php if($element->getAttribute('type') == 'text') : ?>
+                <span class="input-group-addon"><?=$element->getLabel()?></span>
+                <input type="<?=$element->getAttribute('type');?>"
+                       class="form-control <?=$element->getAttribute('class');?>"
+                       name="<?=$element->getAttribute('name')?>"
+                       value="<?=$element->getValue();?>"
+                        <?=$element->getAttribute('disabled');?>>
+            <?php elseif($element->getAttribute('type') == 'select') : ?>
+                <span class="input-group-addon"><?=$element->getLabel();?></span>
+                <?php echo $this->formSelect($element);?>
+            <?php elseif($element->getAttribute('type') == 'file') : ?>
+                <span class="input-group-addon"><?=$element->getLabel();?></span>
+                <?php echo $this->formFile($element);?>
+                <?php if($element->getName() != 'conclusion') : ?>
+                    <button type="button" class="btn btn-sm btn-link add-attach">Добавить</button>
+                <?php endif; ?>
+            <?php elseif($element->getAttribute('type') == 'checkbox') : ?>
+                <span class="input-group-addon"><?=$element->getLabel();?>
+                    <?php echo $this->formCheckbox($element);?>
+                </span>
+            <?php elseif($element->getAttribute('type') == 'textarea') : ?>
+                <span class="input-group-addon"><?=$element->getLabel();?></span>
+                <textarea name="<?=$element->getAttribute('name')?>" class="form-control"><?php $value = $element->getValue(); echo !empty($value) ? $element->getValue() : '';?></textarea>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+
+    <button type="submit" class="btn btn-default">Сохранить</button>
+    <button type="reset" class="btn btn-default">Сброс</button>
+
+</form>
+
+<?php if(!empty($doctors)) : ?>
+    <?php foreach ($doctors as $key=>$clinic) : ?>
+        <div id="doc-clinic-<?=$key;?>">
+            <?php foreach ($clinic as $id=>$name) : ?>
+                <span data-id="<?=$id;?>" data-name="<?=$name;?>"></span>
+            <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>

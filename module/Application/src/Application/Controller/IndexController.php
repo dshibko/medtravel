@@ -9,6 +9,7 @@
 
 namespace Application\Controller;
 
+use Application\DAO\UserDAO;
 use Application\Form\LoginForm;
 use Application\Manager\ApplicationManager;
 use Application\Manager\AuthenticationManager;
@@ -19,7 +20,11 @@ use Zend\View\Model\ViewModel;
 class IndexController extends AbstractActionController
 {
     public function indexAction() {
-        return array('a');
+        if (ApplicationManager::getInstance($this->getServiceLocator())->getCurrentUser()) {
+            return $this->redirect()->toRoute('dashboard');
+        } else {
+            return $this->redirect()->toRoute('login');
+        }
     }
 
     public function loginAction() {
@@ -57,12 +62,15 @@ class IndexController extends AbstractActionController
         return $viewModel;
     }
 
-    public function logoutAction()
-    {
+    public function logoutAction() {
         try {
             AuthenticationManager::getInstance($this->getServiceLocator())->logout();
             return $this->redirect()->toRoute('login');
         } catch (\Exception $e) {
         }
+    }
+
+    public function dashboardAction() {
+        return array('a'=>'qqq');
     }
 }

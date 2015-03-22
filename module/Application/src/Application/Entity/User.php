@@ -34,6 +34,15 @@ class User {
     protected $role;
 
     /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    /**
      * Set email
      *
      * @param string $email
@@ -70,21 +79,44 @@ class User {
         return $this->password;
     }
     /**
-     * Set password
+     * Set displayName
      *
-     * @param string $password
+     * @param string $displayName
      */
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
     }
     /**
-     * Get password
+     * Get displayName
      *
      * @return string
      */
     public function getDisplayName()
     {
         return $this->displayName;
+    }
+
+    /**
+     * Set role
+     *
+     * @param \Application\Entity\Role $role
+     * @return User
+     */
+    public function setRole(Role $role = null)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Application\Entity\Role
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 }

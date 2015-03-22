@@ -11,6 +11,7 @@ namespace Application;
 
 use Application\Helpers\FlashMessages;
 use Application\Helpers\RenderMessages;
+use Application\Manager\ApplicationManager;
 use DoctrineModule\Authentication\Adapter\ObjectRepository;
 use Application\Helpers\GetCurrentUser;
 use Zend\Authentication\AuthenticationService;
@@ -24,6 +25,31 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $sharedEvents = $eventManager->getSharedManager();
+        $sharedEvents->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, array($this, 'onAppDispatch'), 100);
+    }
+
+    public function onAppDispatch(MvcEvent $e) {
+        $matches = $e->getRouteMatch();
+        if ($matches) {
+            $route = $matches->getMatchedRouteName();
+            if ($route != 'login' && $matches != 'logout') {
+                try {
+                    $user = ApplicationManager::getInstance($e->getApplication()->getServiceManager())->getCurrentUser();
+                    if ($user->getRole()->getId() == 2 && $route == 'users') {
+                        $this->redirect('dashboard', $e);
+                    }
+                } catch (\Exception $ex) {
+                    $user = null;
+                }
+                if (!$user) {
+                    $this->redirect('login', $e);
+                }
+            }
+        } else {
+            $this->redirect('login', $e);
+        }
     }
 
     public function getConfig()
@@ -91,5 +117,12 @@ class Module
                 },
             )
         );
+    }
+
+    private function redirect($route, \Zend\Mvc\MvcEvent $e)
+    {
+        $e->getTarget()->plugin('redirect')->toRoute($route);
+        $e->stopPropagation();
+        return false;
     }
 }

@@ -78,13 +78,13 @@ EOT
 
         if ( ! file_exists($destPath)) {
             throw new \InvalidArgumentException(
-                sprintf("Entity destination directory '<info>%s</info>' does not exist.", $input->getArgument('dest-path'))
+                sprintf("Entities destination directory '<info>%s</info>' does not exist.", $input->getArgument('dest-path'))
             );
         }
 
         if ( ! is_writable($destPath)) {
             throw new \InvalidArgumentException(
-                sprintf("Entity destination directory '<info>%s</info>' does not have write permissions.", $destPath)
+                sprintf("Entities destination directory '<info>%s</info>' does not have write permissions.", $destPath)
             );
         }
 

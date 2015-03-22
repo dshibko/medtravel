@@ -37,7 +37,6 @@ abstract class AbstractDAO implements \Zend\ServiceManager\ServiceLocatorAwareIn
      * @throws \Exception
      * @param object $entity
      * @param bool $flush
-     * @param bool $clearCache
      */
     public function save($entity, $flush = true) {
         try {
@@ -52,17 +51,14 @@ abstract class AbstractDAO implements \Zend\ServiceManager\ServiceLocatorAwareIn
     /**
      * @throws \Exception
      * @param int $id
-     * @param bool $clearCache
      */
-    public function removeById($id, $clearCache = true) {
+    public function removeById($id) {
         try {
             $qb = $this->getEntityManager()->createQueryBuilder();
             $qb->delete($this->getRepositoryName(), 'e')
                 ->where('e.id = :e_id')
                 ->setParameter('e_id', $id);
             $qb->getQuery()->execute();
-            if ($clearCache)
-                $this->clearCache();
         } catch (\Exception $e) {
             throw $e;
         }
@@ -71,7 +67,6 @@ abstract class AbstractDAO implements \Zend\ServiceManager\ServiceLocatorAwareIn
     /**
      * @param $id
      * @param bool $hydrate
-     * @param bool $skipCache
      * @return mixed
      */
     public function findOneById($id, $hydrate = false) {
@@ -84,7 +79,6 @@ abstract class AbstractDAO implements \Zend\ServiceManager\ServiceLocatorAwareIn
 
     /**
      * @param bool $hydrate
-     * @param bool $skipCache
      * @return array
      * @throws \Exception
      */
@@ -98,7 +92,6 @@ abstract class AbstractDAO implements \Zend\ServiceManager\ServiceLocatorAwareIn
     /**
      * @param array $fields
      * @param bool $hydrate
-     * @param bool $skipCache
      * @return array
      * @throws \Exception
      */
@@ -113,11 +106,10 @@ abstract class AbstractDAO implements \Zend\ServiceManager\ServiceLocatorAwareIn
     }
 
     /**
-     * @param bool $skipCache
      * @return int
      * @throws \Exception
      */
-    public function count($skipCache = false) {
+    public function count() {
         try {
             $qb = $this->getEntityManager()->createQueryBuilder();
             $qb->select('count(e.id)')

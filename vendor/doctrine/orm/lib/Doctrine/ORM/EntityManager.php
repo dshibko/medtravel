@@ -594,7 +594,7 @@ use Doctrine\Common\Util\ClassUtils;
      * Detaches an entity from the EntityManager, causing a managed entity to
      * become detached.  Unflushed changes made to the entity if any
      * (including removal of the entity), will not be synchronized to the database.
-     * Entity which previously referenced the detached entity will continue to
+     * Entities which previously referenced the detached entity will continue to
      * reference it.
      *
      * @param object $entity The entity to detach.
