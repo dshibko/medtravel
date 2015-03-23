@@ -54,7 +54,7 @@
 .c-week-day {
     width: 14.28%;
     height: 10.38%;
-    background-color: rgb(145, 172, 203);
+    background-color: #9d9d9d;
     color: white;
     float: left;
     text-align: center;
@@ -108,7 +108,7 @@
 .c-grid-title {
     font-weight: bold;
     float: left;
-    background-color: rgb(112, 145, 183);
+    background-color: #363636;
     color: white;
 }
 
@@ -117,7 +117,7 @@
     height: 12%;
     text-align: center;
     font-weight: bold;
-    background-color: rgb(135, 155, 188);
+    background-color: #363636;
     color: white;
 }
 

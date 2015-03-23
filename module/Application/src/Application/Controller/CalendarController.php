@@ -23,6 +23,7 @@ class CalendarController extends AbstractActionController
                 $response[$k]['datetime'] = $event['date']->format('Y-m-d');
             }
         }
+
         die(json_encode($response));
     }
 
@@ -49,8 +50,11 @@ class CalendarController extends AbstractActionController
 
                 $calendarDAO->save($userData);
 
-                echo 'Событие добавлено';
-                die();
+                $viewModel = new ViewModel(array(
+                    'done' => true,
+                ));
+                $viewModel->setTerminal(true);
+                return $viewModel;
             } else {
                 $form->getMessages();
             }

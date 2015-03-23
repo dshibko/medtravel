@@ -9,6 +9,7 @@
 
 namespace Application\Controller;
 
+use Application\DAO\ClientsDAO;
 use Application\DAO\UserDAO;
 use Application\Form\LoginForm;
 use Application\Manager\ApplicationManager;
@@ -70,6 +71,32 @@ class IndexController extends AbstractActionController
     }
 
     public function dashboardAction() {
-        return array('a'=>'qqq');
+        $clients = ClientsDAO::getInstance($this->getServiceLocator())->getAllClients();
+
+        $stats['date'] = array();
+        $stats['status'] = array(
+            'Не обработан' => 0,
+            'В работе' => 0,
+            'Согласование' => 0,
+            'Архив' => 0,
+            'Пролечен' => 0,
+            'Записан в календарь' => 0,
+            'Сорвался' => 0);
+        $users = UserDAO::getInstance($this->getServiceLocator())->getAllUsers();
+
+        foreach ($users as $user) {
+            $stats['manager'][$user->getDisplayName()] = 0;
+        }
+
+        if (!empty($clients)) {
+            foreach ($clients as $client) {
+                $formattedDate = $client->getDateAdded()->format('d.m.Y');
+                $stats['date'][$formattedDate] = isset($stats['date'][$formattedDate]) ? $stats['date'][$formattedDate] + 1 : 1;
+                $stats['manager'][$client->getManager()->getDisplayName()] += 1;
+                $stats['status'][$client->getStatus()] += 1;
+            }
+        }
+
+        return array('stats' => $stats);
     }
 }

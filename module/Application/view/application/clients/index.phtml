@@ -13,6 +13,7 @@
                     <th>Страна</th>
                     <th>Клиника</th>
                     <th>Врач</th>
+                    <th>Менеджер</th>
                     <th>Дата добавления</th>
                     <th></th>
                 </tr>
@@ -28,6 +29,7 @@
                             <td><?=$client->getCountry(); ?></td>
                             <td><?=$client->getClinic()->getName(); ?></td>
                             <td><?=$client->getDoctor()->getName(); ?></td>
+                            <td><?=$client->getManager()->getDisplayName(); ?></td>
                             <td><?=$client->getDateAdded()->format('d-M-Y'); ?></td>
                             <td style="width: 40px;">
                                 <a href="/clients/edit/<?=$client->getId()?>"><span class="label label-info">Редактировать</span></a>

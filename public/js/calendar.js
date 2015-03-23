@@ -146,7 +146,7 @@
                     d = new Date(dateArr[0], dateArr[1]-1, dateArr[2]);
                 }
                 if ((d.getMonth()) == dMonth && d.getFullYear() == dYear) {
-                    var date = lpad(d.getDate(), 2) + '.' + lpad(d.getMonth(), 2);
+                    var date = lpad(d.getDate(), 2) + '.' + lpad(d.getMonth()+1, 2);
                     var item = $('<div/>').addClass('c-event-item');
                     var title = $('<div/>').addClass('title').html(date + '  ' + settings.events[i].title + '<br/>');
                     var description = $('<div/>').addClass('description').html(settings.events[i].description + '<br/>');
@@ -160,6 +160,7 @@
                             $.ajax({url: settings.removeUrl+$(this).attr('id'),
                                 async: false,
                                 success: function () {
+                                    initCalendar();
                                 }
                             });
                         }
