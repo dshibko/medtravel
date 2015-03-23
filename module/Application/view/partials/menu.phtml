@@ -1,0 +1,31 @@
+<?php
+$currentUserRole = $this->getCurrentUser()->getRole()->getId();;
+$pages = $this->container->getPages();
+foreach ($pages as $page)
+    if ($page->getRoute() == 'dashboard') {
+        $pages = $page;
+        break;
+    }
+$first = true;
+?>
+<ul class="nav navbar-nav side-nav">
+    <?php foreach ($pages as $page) : ?>
+        <?php
+        $class = '';
+        if ($page->isActive(true))
+            $class = 'active';
+        ?>
+        <?php if ($currentUserRole == 2 && $page->getRoute() == 'users') { continue; } ?>
+            <li class="<?=$class;?> ">
+                <a href="<?=$page->getHref()?>">
+                    <i class="fa fa-fw <?=$page->getLabel();?>"></i>
+                <span class="title">
+                    <?=$page->getTitle() ?>
+                </span>
+                    <?php if ($page->isActive(true)) : ?>
+                        <span class="selected"></span>
+                    <?php endif;?>
+                </a>
+            </li>
+    <?php endforeach; ?>
+</ul>

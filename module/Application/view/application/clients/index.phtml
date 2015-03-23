@@ -13,7 +13,7 @@
                     <th>Страна</th>
                     <th>Клиника</th>
                     <th>Врач</th>
-                    <th>Дата Добавления</th>
+                    <th>Дата добавления</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -30,7 +30,7 @@
                             <td><?=$client->getDoctor()->getName(); ?></td>
                             <td><?=$client->getDateAdded()->format('d-M-Y'); ?></td>
                             <td style="width: 40px;">
-                                <a href="/users/edit/<?=$client->getId()?>"><span class="label label-info">Редактировать</span></a>
+                                <a href="/clients/edit/<?=$client->getId()?>"><span class="label label-info">Редактировать</span></a>
                                 <!--<br>
                                 <?php /*if ($this->getCurrentUser()->getId() != $user->getId()) : */?>
                                     <a href="/users/delete/<?/*=$user->getId()*/?>" onClick="return confirm('Подтвердите удаление пользователя')">

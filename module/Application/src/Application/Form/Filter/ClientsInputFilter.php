@@ -131,6 +131,7 @@ class ClientsInputFilter extends InputFilter
                     'break_chain_on_failure' => true,
                     'name' => '\Zend\Validator\File\Extension',
                     'options' => array(
+                        'extension' => 'pdf',
                         'messages' => array(
                             \Zend\Validator\File\Extension::FALSE_EXTENSION => 'Файл должен быть в формате PDF',
                         ),

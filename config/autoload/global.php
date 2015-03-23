@@ -27,6 +27,7 @@ return array(
                     'user'     => 'root',
                     'password' => '123',
                     'dbname'   => 'zend_loc',
+                    'driverOptions' => array(1002=>'SET NAMES utf8'),
                 )
             )
         ),

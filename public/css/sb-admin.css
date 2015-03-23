@@ -121,7 +121,7 @@ ul.alert-dropdown {
         position: fixed;
         top: 51px;
         left: 225px;
-        width: 225px;
+        width: 300px;
         margin-left: -225px;
         border: none;
         border-radius: 0;
@@ -225,4 +225,16 @@ ul.alert-dropdown {
 
 .panel-yellow a:hover {
     color: #df8a13;
+}
+
+.navbar-inverse .navbar-nav>.active>a {
+    width: 100%;
+}
+
+.navbar-nav>li {
+    width: 100%;
+}
+
+#wrapper {
+    padding-left: 300px;
 }

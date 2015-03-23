@@ -54,10 +54,6 @@ CREATE TABLE IF NOT EXISTS `clients` (
 -- Dumping data for table `clients`
 --
 
-INSERT INTO `clients` (`id`, `fio`, `service_id`, `diagnosis`, `contacts`, `dos`, `status`, `comments`, `country`, `contact_type`, `attachments`, `clinic_id`, `doctor_id`, `conclusion`, `payment`, `date_added`, `manager_id`, `informed`) VALUES
-(1, 'Ð²Ð°ÑÑ Ð¿ÑƒÐ¿ÐºÐ¸Ð½', 3, 'Ð±Ð¾Ð»Ð¸Ñ‚ Ð½Ð¾Ð³Ð°', 'Ð¹Ñ†Ñƒ', '2015-03-22 00:00:00', '', 'ÑƒÑƒÑƒÑƒÑƒÑƒÑƒÑƒÑƒÑƒ', '', '123', 'a:1:{i:0;s:47:"uploads/Screenshot_from_2014-12-31_08:00:00.png";}', 2, 4, '', '', '2015-03-22 00:00:00', 1, 0),
-(2, 'asdqwd', 4, 'qwdqwd', 'qwdqwd', '2015-03-22 15:18:17', '', '12e12', '', 'e1212e', 'a:1:{i:0;s:47:"uploads/Screenshot_from_2014-12-17_05:31:59.png";}', 1, 2, '', 'zzzzz', '2015-03-22 15:18:17', 1, 1);
-
 -- --------------------------------------------------------
 
 --

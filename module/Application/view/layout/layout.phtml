@@ -12,14 +12,19 @@
 
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        ->prependStylesheet($this->basePath('css/style.css'))
+                        ->prependStylesheet($this->basePath('js/fancybox/jquery.fancybox.css'))
                         ->prependStylesheet($this->basePath('css/sb-admin.css'))
+                        ->prependStylesheet($this->basePath('css/calendar.css'))
                         ->prependStylesheet($this->basePath('css/font-awesome/css/font-awesome.min.css'))
+                        ->prependStylesheet($this->basePath('js/datatables/css/jquery.dataTables.min.css'))
                         ->prependStylesheet($this->basePath('js/datepicker/jquery.datepick.css'))
                         ->prependStylesheet($this->basePath('css/bootstrap.min.css')) ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
+            ->prependFile($this->basePath('js/fancybox/jquery.fancybox.pack.js'))
+            ->prependFile($this->basePath('js/calendar.js'))
+            ->prependFile($this->basePath('js/datatables/js/jquery.dataTables.min.js'))
             ->prependFile($this->basePath('js/datepicker/jquery.datepick.js'))
             ->prependFile($this->basePath('js/datepicker/jquery.plugin.js'))
             ->prependFile($this->basePath('js/bootstrap.min.js'))
@@ -28,8 +33,42 @@
             ->prependFile($this->basePath('js/html5shiv.js'),   'text/javascript', array('conditional' => 'lt IE 9',))
         ; ?>
 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.table').dataTable();
+                initCalendar();
+
+                $('#fancybox').fancybox({
+                    openEffect  : "elastic",
+                    closeEffect : "elastic",
+                    type : "iframe",
+                    afterClose : function() {
+                        initCalendar();
+                    }
+                });
+            });
+
+
+
+            function initCalendar() {
+                $('#calendar').eCalendar({
+                    url: '/calendar/events',
+                    removeUrl: '/calendar/remove/'
+                });
+                $('.c-previous').bind('click', bindCalendarEvents);
+                $('.c-next').bind('click', bindCalendarEvents);
+                bindCalendarEvents();
+            }
+
+            function bindCalendarEvents() {
+                $('.c-day.c-pad-top').on('dblclick', function(e) {
+                    $('#fancybox').trigger('click');
+                });
+            }
+        </script>
     </head>
     <body>
+
     <div id="wrapper">
 
     <!-- Navigation -->
@@ -47,7 +86,7 @@
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?=$this->user->getDisplayName()?> <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?=$this->getCurrentUser()->getDisplayName()?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="/logout"><i class="fa fa-fw fa-power-off"></i> Выйти</a>
@@ -57,22 +96,9 @@
         </ul>
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav side-nav">
-                <li class="active">
-                    <a href="/dashboard"><i class="fa fa-fw fa-dashboard"></i> Панель управления</a>
-                </li>
-                <li>
-                    <a href="/clients"><i class="fa fa-fw fa-file"></i> Клиенты</a>
-                </li>
-                <?php if($this->user->getRole()->getName() == 'admin') : ?>
-                    <li>
-                        <a href="/users"><i class="fa fa-fw fa-edit"></i> Пользователи</a>
-                    </li>
-                <?php endif; ?>
-                <li>
-                    <a href="/timetable"><i class="fa fa-fw fa-table"></i> Календарь</a>
-                </li>
-            </ul>
+            <?php echo $this->navigation('navigation')->menu()
+                ->setPartial('partials/menu'); ?>
+            <div id="calendar" class="noSelect" style="top: 200px; position: fixed;"></div>
         </div>
         <!-- /.navbar-collapse -->
     </nav>
@@ -80,7 +106,7 @@
     <div id="page-wrapper">
 
     <div class="container-fluid">
-
+        <a style="display: none;;" href="/calendar/add" id="fancybox"></a>
         <?php echo $this->content; ?>
 
     </div>

@@ -78,6 +78,20 @@ return array(
                     ),
                 ),
             ),
+            'calendar' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route'    => '/calendar[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Calendar',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
         ),
     ),
     'service_manager' => array(
@@ -88,7 +102,11 @@ return array(
         'aliases' => array(
             'translator' => 'MvcTranslator',
         ),
+        'factories' => array(
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+        ),
     ),
+
     'translator' => array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(
@@ -103,7 +121,8 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Users' => 'Application\Controller\UsersController',
-            'Application\Controller\Clients' => 'Application\Controller\ClientsController'
+            'Application\Controller\Clients' => 'Application\Controller\ClientsController',
+            'Application\Controller\Calendar' => 'Application\Controller\CalendarController'
         ),
     ),
     'view_manager' => array(
@@ -118,6 +137,7 @@ return array(
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'partials/menu' => __DIR__ . '/../view/partials/menu.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
@@ -127,6 +147,35 @@ return array(
     'console' => array(
         'router' => array(
             'routes' => array(
+            ),
+        ),
+    ),
+
+    'navigation' => array(
+        'default' => array(
+            'admin' => array(
+                'title' => 'Панель управления',
+                'label' => 'icon-home',
+                'route' => 'dashboard',
+                'pages' => array(
+                    'home' => array(
+                        'title' => 'Панель управления',
+                        'label' => 'fa-dashboard',
+                        'route' => 'dashboard',
+                    ),
+
+                    'clients' => array(
+                        'title' => 'Клиенты',
+                        'label' => 'fa-file',
+                        'route' => 'clients',
+                    ),
+
+                    'users' => array(
+                        'title' => 'Пользователи',
+                        'label' => 'fa-edit',
+                        'route' => 'users',
+                    ),
+                ),
             ),
         ),
     ),

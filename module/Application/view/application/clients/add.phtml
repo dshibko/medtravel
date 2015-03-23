@@ -64,6 +64,7 @@ $messages = $form->getMessages();
                 <span class="input-group-addon"><?=$element->getLabel();?></span>
                 <?php echo $this->formFile($element);?>
                 <?php if($element->getName() != 'conclusion') : ?>
+
                     <button type="button" class="btn btn-sm btn-link add-attach">Добавить</button>
                 <?php endif; ?>
             <?php elseif($element->getAttribute('type') == 'checkbox') : ?>

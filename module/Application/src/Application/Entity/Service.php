@@ -27,7 +27,7 @@ class Service {
         return $this->id;
     }
     /**
-     * Set email
+     * Set name
      *
      * @param string $name
      */

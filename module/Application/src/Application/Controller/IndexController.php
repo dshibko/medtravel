@@ -66,8 +66,7 @@ class IndexController extends AbstractActionController
         try {
             AuthenticationManager::getInstance($this->getServiceLocator())->logout();
             return $this->redirect()->toRoute('login');
-        } catch (\Exception $e) {
-        }
+        } catch (\Exception $e) {}
     }
 
     public function dashboardAction() {
