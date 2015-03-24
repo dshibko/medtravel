@@ -1,32 +1,32 @@
 <div class="">
     <h1 class="page-header">Панель управления</h1>
 
-    <script>
+    <!--<script>
         $(document).ready(function() {
-            <?php if (!empty($this->stats['manager'])) : ?>
+            <?php /*if (!empty($this->stats['manager'])) : */?>
                 Morris.Donut({
                     element: 'manager-chart',
                     data: [
-                        <?php foreach ($this->stats['manager'] as $name=>$stat) : ?>
+                        <?php /*foreach ($this->stats['manager'] as $name=>$stat) : */?>
                         {
-                            label: "<?=$name;?>",
-                            value: <?=$stat;?>
+                            label: "<?/*=$name;*/?>",
+                            value: <?/*=$stat;*/?>
                         },
-                        <?php endforeach; ?>
+                        <?php /*endforeach; */?>
                     ]
                 });
-            <?php endif; ?>
+            <?php /*endif; */?>
 
-            <?php if (!empty($this->stats['status'])) : ?>
+            <?php /*if (!empty($this->stats['status'])) : */?>
                 Morris.Bar({
                     element: 'status-chart',
                     data: [
-                        <?php foreach ($this->stats['status'] as $status=>$stat) : ?>
+                        <?php /*foreach ($this->stats['status'] as $status=>$stat) : */?>
                             {
-                                status: "<?=$status;?>",
-                                count: <?=$stat;?>
+                                status: "<?/*=$status;*/?>",
+                                count: <?/*=$stat;*/?>
                             },
-                        <?php endforeach; ?>
+                        <?php /*endforeach; */?>
                     ],
                     xkey: 'status',
                     ykeys: ['count'],
@@ -37,26 +37,7 @@
                     resize: true
                 });
 
-            <?php endif; ?>
-
-            <?php if (!empty($this->stats['date'])) : ?>
-            Morris.Line({
-                element: 'date-chart',
-                data: [
-                    <?php foreach ($this->stats['date'] as $date=>$stat) : ?>
-                        {
-                            dateAdded: "<?=$date;?>",
-                            count: <?=$stat;?>
-                        },
-                    <?php endforeach; ?>
-                ],
-                xkey: 'dateAdded',
-                ykeys: ['count'],
-                labels: ['Клиентов'],
-                smooth: true,
-                resize: true
-            });
-            <?php endif; ?>
+            <?php /*endif; */?>
         });
     </script>
 
@@ -68,5 +49,6 @@
     </div>
     <div class="manager-body" style="width:45%; float: right;">
         <div id="manager-chart"></div>
-    </div>
+    </div>-->
+    Здесь могут быть графики
 </div>

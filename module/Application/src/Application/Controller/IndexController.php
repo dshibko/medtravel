@@ -90,7 +90,7 @@ class IndexController extends AbstractActionController
 
         if (!empty($clients)) {
             foreach ($clients as $client) {
-                $formattedDate = $client->getDateAdded()->format('d.m.Y');
+                $formattedDate = $client->getDateAdded()->format('Y-m-d');
                 $stats['date'][$formattedDate] = isset($stats['date'][$formattedDate]) ? $stats['date'][$formattedDate] + 1 : 1;
                 $stats['manager'][$client->getManager()->getDisplayName()] += 1;
                 $stats['status'][$client->getStatus()] += 1;

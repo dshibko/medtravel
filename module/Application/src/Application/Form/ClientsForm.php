@@ -175,6 +175,17 @@ class ClientsForm extends AbstractForm {
         ));
 
         $this->add(array(
+            'name' => 'newClinic',
+            'type'  => 'text',
+            'attributes' => array(
+                'class' => '',
+                'placeholder' => 'Новая клиника',
+            ),
+            'options' => array(
+            ),
+        ));
+
+        $this->add(array(
             'name' => 'doctor',
             'type'  => 'Zend\Form\Element\Select',
             'attributes' => array(
@@ -184,6 +195,17 @@ class ClientsForm extends AbstractForm {
             'options' => array(
                 'label' => 'Врач',
                 'value_options' => $this->selects['doctors']
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'newDoctor',
+            'type'  => 'text',
+            'attributes' => array(
+                'class' => '',
+                'placeholder' => 'Новая врач',
+            ),
+            'options' => array(
             ),
         ));
 

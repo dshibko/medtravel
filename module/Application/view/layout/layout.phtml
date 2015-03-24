@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle('MedTravel') ?>
 
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -23,6 +23,7 @@
 
         <!-- Scripts -->
         <?php echo $this->headScript()
+            ->prependFile($this->basePath('js/flot/jquery.flot.js'))
             ->prependFile($this->basePath('js/morris/raphael.min.js'))
             ->prependFile($this->basePath('js/morris/morris.min.js'))
             ->prependFile($this->basePath('js/fancybox/jquery.fancybox.pack.js'))

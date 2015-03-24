@@ -15,6 +15,8 @@ use Application\DAO\DoctorDAO;
 use Application\DAO\ServiceDAO;
 use Application\DAO\UserDAO;
 use Application\Entity\Clients;
+use Application\Entity\Doctor;
+use Application\Entity\Clinic;
 use Application\Form\ClientsForm;
 use Application\Manager\ApplicationManager;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -93,12 +95,32 @@ class ClientsController extends AbstractActionController
             );
 
             $form->setData($post);
-            if ($form->isValid()) {
+            if ($form->isValid() &&
+                (empty($post['newDoctor']) && empty($post['newClinic'])) ||
+                (!empty($post['newDoctor']) && empty($post['newClinic'])) ||
+                (!empty($post['newDoctor']) && !empty($post['newClinic']))
+            ) {
                 $data = $form->getData();
 
                 $dateTime = new \DateTime();
                 $dateTime->setTimestamp(strtotime($data['dos']));
                 $data['dos'] = $dateTime;
+
+                if (!empty($data['newClinic'])) {
+                    $newClinic = new Clinic();
+                    $newClinic->setName($data['newClinic']);
+                    ClinicDAO::getInstance($this->getServiceLocator())->save($newClinic);
+                    $data['clinic'] = $newClinic->getId();
+                }
+
+                if (!empty($data['newDoctor'])) {
+                    $newDoctor = new Doctor();
+                    $newDoctor->setName($data['newDoctor']);
+                    $clinic = !empty($newClinic) ? $newClinic : ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']);
+                    $newDoctor->setClinic($clinic);
+                    DoctorDAO::getInstance($this->getServiceLocator())->save($newDoctor);
+                    $data['doctor'] = $newDoctor->getId();
+                }
 
                 if (!empty($post['attachments'])) {
                     foreach ($post['attachments'] as $attach) {
@@ -142,7 +164,11 @@ class ClientsController extends AbstractActionController
                 $clientsDAO->save($client);
                 return $this->redirect()->toRoute('clients');
             } else {
-                $form->getMessages();
+                if (empty($post['newDoctor']) && !empty($post['newClinic'])) {
+                    $messages = $form->getMessages();
+                    $messages['clinic'] = array('Добавлена клиника, но не добавлен врач');
+                    $form->setMessages($messages);
+                }
             }
         }
         return array('form' => $form, 'attachments' => $attachments, 'conclusion' => $conclusion, 'doctors' => $doctors);
@@ -174,7 +200,11 @@ class ClientsController extends AbstractActionController
 
             $form->setData($post);
 
-            if ($form->isValid()) {
+            if ($form->isValid() &&
+                (empty($post['newDoctor']) && empty($post['newClinic'])) ||
+                (!empty($post['newDoctor']) && empty($post['newClinic'])) ||
+                (!empty($post['newDoctor']) && !empty($post['newClinic']))
+            ) {
                 $data = $form->getData();
                 $dateTime = new \DateTime();
 
@@ -182,6 +212,22 @@ class ClientsController extends AbstractActionController
                 $data['dos'] = $dateTime;
                 $dateTime->setTimestamp(time());
                 $now = $dateTime;
+
+                if (!empty($data['newClinic'])) {
+                    $newClinic = new Clinic();
+                    $newClinic->setName($data['newClinic']);
+                    ClinicDAO::getInstance($this->getServiceLocator())->save($newClinic);
+                    $data['clinic'] = $newClinic->getId();
+                }
+
+                if (!empty($data['newDoctor'])) {
+                    $newDoctor = new Doctor();
+                    $newDoctor->setName($data['newDoctor']);
+                    $clinic = !empty($newClinic) ? $newClinic : ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']);
+                    $newDoctor->setClinic($clinic);
+                    DoctorDAO::getInstance($this->getServiceLocator())->save($newDoctor);
+                    $data['doctor'] = $newDoctor->getId();
+                }
 
                 if (!empty($post['attachments'])) {
                     foreach ($post['attachments'] as $attach) {
@@ -223,7 +269,11 @@ class ClientsController extends AbstractActionController
 
                 return $this->redirect()->toRoute('clients');
             } else {
-                $form->getMessages();
+                if (empty($post['newDoctor']) && !empty($post['newClinic'])) {
+                    $messages = $form->getMessages();
+                    $messages['clinic'] = array('Добавлена клиника, но не добавлен врач');
+                    $form->setMessages($messages);
+                }
             }
         }
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 22, 2015 at 03:27 PM
+-- Generation Time: Mar 24, 2015 at 11:41 AM
 -- Server version: 5.5.35-1ubuntu1
 -- PHP Version: 5.4.27
 
@@ -16,6 +16,29 @@ SET time_zone = "+00:00";
 DROP DATABASE `zend_loc`;
 CREATE DATABASE IF NOT EXISTS `zend_loc` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `zend_loc`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `calendar`
+--
+
+DROP TABLE IF EXISTS `calendar`;
+CREATE TABLE IF NOT EXISTS `calendar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `calendar`
+--
+
+INSERT INTO `calendar` (`id`, `title`, `description`, `date`) VALUES
+(6, 'qqq', '123', '2015-03-22'),
+(7, 'qqq', '123', '2015-03-11');
 
 -- --------------------------------------------------------
 
@@ -48,11 +71,18 @@ CREATE TABLE IF NOT EXISTS `clients` (
   KEY `clinic` (`clinic_id`),
   KEY `doctor` (`doctor_id`),
   KEY `manager` (`manager_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `clients`
 --
+
+INSERT INTO `clients` (`id`, `fio`, `service_id`, `diagnosis`, `contacts`, `dos`, `status`, `comments`, `country`, `contact_type`, `attachments`, `clinic_id`, `doctor_id`, `conclusion`, `payment`, `date_added`, `manager_id`, `informed`) VALUES
+(1, 'вася пупкин', 3, 'болит нога', 'йцуйцу', '2015-03-21 00:00:00', 'Согласование', 'фывфыв', 'Украина', '123', 'a:1:{i:0;s:47:"uploads/Screenshot_from_2014-12-31_08:00:00.png";}', 2, 4, '', '', '2015-03-21 00:00:00', 1, 0),
+(2, 'asdqwd', 4, 'qwdqwd', 'qwdqwd', '2015-03-20 15:18:17', 'Не обработан', '12e12', '', 'e1212e', 'a:1:{i:0;s:47:"uploads/Screenshot_from_2014-12-17_05:31:59.png";}', 1, 2, '', 'zzzzz', '2015-03-23 15:18:17', 1, 1),
+(3, 'вася пупкин', 3, 'болит нога', 'йцуйцу', '2015-03-21 00:00:00', 'Согласование', 'фывфыв', 'Украина', '123', 'a:1:{i:0;s:47:"uploads/Screenshot_from_2014-12-31_08:00:00.png";}', 2, 4, '', '', '2015-03-21 00:00:00', 5, 0),
+(4, 'asdqwd', 4, 'qwdqwd', 'qwdqwd', '2015-03-22 15:18:17', 'Не обработан', '12e12', '', 'e1212e', 'a:1:{i:0;s:47:"uploads/Screenshot_from_2014-12-17_05:31:59.png";}', 1, 2, '', 'zzzzz', '2015-03-22 15:18:17', 5, 1),
+(5, 'aaaaaa', 12, 'asdasd', 'qwdqw', '2015-03-24 00:00:00', 'Архив', 'zxczx', 'Беларусь', 'cewcwewecwecwce', 'N;', 2, 4, '', '', '2015-03-24 11:20:24', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -65,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `clinic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `clinic`
@@ -73,7 +103,8 @@ CREATE TABLE IF NOT EXISTS `clinic` (
 
 INSERT INTO `clinic` (`id`, `name`) VALUES
 (1, 'Нордин'),
-(2, 'Экомедсервис');
+(2, 'Экомедсервис'),
+(3, 'Больничка');
 
 -- --------------------------------------------------------
 
@@ -85,10 +116,10 @@ DROP TABLE IF EXISTS `doctor`;
 CREATE TABLE IF NOT EXISTS `doctor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `clinic_id` int(11) NOT NULL,
+  `clinic_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `clinic_id` (`clinic_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `doctor`
@@ -98,7 +129,9 @@ INSERT INTO `doctor` (`id`, `name`, `clinic_id`) VALUES
 (1, 'Пушкин', 1),
 (2, 'Гоголь', 1),
 (3, 'Лермонтов', 2),
-(4, 'Тургенев', 2);
+(4, 'Тургенев', 2),
+(5, 'Тютчев', 3),
+(6, 'Дантес', 3);
 
 -- --------------------------------------------------------
 
@@ -219,14 +252,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `role` (`role_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `display_name`, `email`, `password`, `role_id`) VALUES
-(1, 'A', 'admin@admin.com', '63076276ad8c688f7c50c68f45d285c1', 1);
+(1, 'A', 'admin@admin.com', '63076276ad8c688f7c50c68f45d285c1', 1),
+(5, 'qqq', 'manager@admin.com', '698d51a19d8a121ce581499d7b701668', 2);
 
 --
 -- Constraints for dumped tables
@@ -236,7 +270,10 @@ INSERT INTO `user` (`id`, `display_name`, `email`, `password`, `role_id`) VALUES
 -- Constraints for table `clients`
 --
 ALTER TABLE `clients`
-  ADD CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+  ADD CONSTRAINT `clients_ibfk_4` FOREIGN KEY (`manager_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`),
+  ADD CONSTRAINT `clients_ibfk_2` FOREIGN KEY (`clinic_id`) REFERENCES `clinic` (`id`),
+  ADD CONSTRAINT `clients_ibfk_3` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`);
 
 --
 -- Constraints for table `doctor`

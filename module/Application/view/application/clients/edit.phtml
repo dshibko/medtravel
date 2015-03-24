@@ -6,6 +6,8 @@ $form->prepare();
 echo $this->form()->openTag($form);
 $elements = $form->getElements();
 $inputs = $elements;//array($elements['displayName'], $elements['email'], $elements['password']);
+unset($inputs['newClinic']);
+unset($inputs['newDoctor']);
 $errors  = $form->getInputFilter()->getMessages();
 $messages = $form->getMessages();
 ?>
@@ -61,6 +63,19 @@ $messages = $form->getMessages();
                 <?php elseif($element->getAttribute('type') == 'select') : ?>
                     <span class="input-group-addon"><?=$element->getLabel();?></span>
                     <?php echo $this->formSelect($element);?>
+                    <?php if ($element->getAttribute('name') == 'clinic') : ?>
+                        <input type="<?=$elements['newClinic']->getAttribute('type');?>"
+                               class="form-control <?=$elements['newClinic']->getAttribute('class');?>"
+                               name="<?=$elements['newClinic']->getAttribute('name')?>"
+                               value="<?=$elements['newClinic']->getValue();?>"
+                               placeholder="<?=$elements['newClinic']->getAttribute('placeholder');?>">
+                    <?php elseif ($element->getAttribute('name') == 'doctor') :?>
+                        <input type="<?=$elements['newDoctor']->getAttribute('type');?>"
+                               class="form-control <?=$elements['newDoctor']->getAttribute('class');?>"
+                               name="<?=$elements['newDoctor']->getAttribute('name')?>"
+                               value="<?=$elements['newDoctor']->getValue();?>"
+                               placeholder="<?=$elements['newDoctor']->getAttribute('placeholder');?>">
+                    <?php endif; ?>
                 <?php elseif($element->getAttribute('type') == 'file') : ?>
                     <span class="input-group-addon"><?=$element->getLabel();?></span>
                     <?php echo $this->formFile($element);?>
