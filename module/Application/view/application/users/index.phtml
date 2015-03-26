@@ -4,7 +4,6 @@
         <table class="table table-hover table-striped table-bordered">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Имя</th>
                 <th>Email</th>
                 <th>Роль</th>
@@ -14,12 +13,12 @@
             <tbody>
                 <?php foreach ($this->users as $user) : ?>
                     <tr>
-                        <td style="width: 15px;"><?=$user->getId(); ?></td>
                         <td><?=$user->getDisplayName(); ?></td>
                         <td><?=$user->getEmail(); ?></td>
                         <td><?=$user->getRole()->getName(); ?></td>
                         <td style="width: 40px;">
-                            <a href="/users/edit/<?=$user->getId()?>"><span class="label label-info">Редактировать</span></a>
+                            <a href="/users/edit/<?=$user->getId()?>"><img width="15px;" src="/img/edit.png"></a>
+                            <a href="/users/edit/<?=$user->getId()?>?view=1"><img width="15px;" src="/img/view.png"></a>
                             <!--<br>
                             <?php /*if ($this->getCurrentUser()->getId() != $user->getId()) : */?>
                                 <a href="/users/delete/<?/*=$user->getId()*/?>" onClick="return confirm('Подтвердите удаление пользователя')">

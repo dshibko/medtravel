@@ -81,10 +81,9 @@ return array(
             'calendar' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route'    => '/calendar[/:action][/:id]',
+                    'route'    => '/calendar[/:action][/:data]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id' => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Application\Controller\Calendar',

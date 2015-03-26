@@ -45,13 +45,13 @@ class IndexController extends AbstractActionController
                 $password = $data['password'];
                 $result = AuthenticationManager::getInstance($this->getServiceLocator())->authenticate($identity, $password);
                 if (in_array($result->getCode(), array(Result::FAILURE_IDENTITY_NOT_FOUND, Result::FAILURE_CREDENTIAL_INVALID))) {
-                    $this->flashmessenger()->addErrorMessage('Направильный Email или пароль');
+                    $form->setMessages(array('email' => array('Нeправильный Email или пароль')));
                 }
                 if ($result->isValid()) {
                     return $this->redirect()->toRoute('dashboard');
                 }
             } else {
-                $this->formErrors($form, $this);
+                $form->setMessages(array('email' => array('Нeправильный Email или пароль')));
             }
         }
 

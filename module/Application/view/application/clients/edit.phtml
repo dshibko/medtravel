@@ -3,6 +3,8 @@
 $form = $this->form;
 $form->prepare();
 
+$disabled = $this->view ? 'disabled' : '';
+
 echo $this->form()->openTag($form);
 $elements = $form->getElements();
 $inputs = $elements;//array($elements['displayName'], $elements['email'], $elements['password']);
@@ -33,6 +35,10 @@ $messages = $form->getMessages();
                 $(this).before(input);
             });
 
+            $('.delAttach').bind('click', function() {
+                $(this).parent().remove();
+            });
+
             $('select[name=clinic]').trigger('change');
         });
     </script>
@@ -59,55 +65,67 @@ $messages = $form->getMessages();
                            class="form-control <?=$element->getAttribute('class');?>"
                            name="<?=$element->getAttribute('name')?>"
                            value="<?=$element->getValue();?>"
-                        <?=$element->getAttribute('disabled');?>>
-                <?php elseif($element->getAttribute('type') == 'select') : ?>
+                        <?=$disabled;?>>
+                <?php elseif($element->getAttribute('type') == 'select') :
+                    if ($disabled) $element->setAttribute('disabled', 'disabled');
+                    ?>
                     <span class="input-group-addon"><?=$element->getLabel();?></span>
                     <?php echo $this->formSelect($element);?>
-                    <?php if ($element->getAttribute('name') == 'clinic') : ?>
+                    <?php if ($element->getAttribute('name') == 'clinic' && !$disabled) : ?>
                         <input type="<?=$elements['newClinic']->getAttribute('type');?>"
                                class="form-control <?=$elements['newClinic']->getAttribute('class');?>"
                                name="<?=$elements['newClinic']->getAttribute('name')?>"
                                value="<?=$elements['newClinic']->getValue();?>"
                                placeholder="<?=$elements['newClinic']->getAttribute('placeholder');?>">
-                    <?php elseif ($element->getAttribute('name') == 'doctor') :?>
+                    <?php elseif ($element->getAttribute('name') == 'doctor' && !$disabled) :?>
                         <input type="<?=$elements['newDoctor']->getAttribute('type');?>"
                                class="form-control <?=$elements['newDoctor']->getAttribute('class');?>"
                                name="<?=$elements['newDoctor']->getAttribute('name')?>"
                                value="<?=$elements['newDoctor']->getValue();?>"
                                placeholder="<?=$elements['newDoctor']->getAttribute('placeholder');?>">
                     <?php endif; ?>
-                <?php elseif($element->getAttribute('type') == 'file') : ?>
+                <?php elseif($element->getAttribute('type') == 'file' && !$disabled) : ?>
                     <span class="input-group-addon"><?=$element->getLabel();?></span>
                     <?php echo $this->formFile($element);?>
-                    <?php if($element->getName() != 'conclusion') : ?>
-                        <button type="button" class="btn btn-sm btn-link add-attach">Добавить</button>
-                        <?php if (!empty($this->attachments)) : ?>
-                            <?php foreach ($this->attachments as $attach) : ?>
-                                <br>
+                    <button type="button" class="btn btn-sm btn-link add-attach">Добавить</button>
+                    <?php if (!empty($this->attachments) && $element->getName() != 'conclusions[]') : ?>
+                        <?php foreach ($this->attachments as $attach) : ?>
+                            <br>
+                            <span>
                                 <input type="hidden" name="oldAttachments[]" value="<?=$attach;?>">
                                 <a target="blank" href="/<?=$attach?>"><?=str_replace('uploads/', '', $attach);?></a>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    <?php else : ?>
-                        <?php if (!empty($this->conclusion)) : ?>
-                            <input type="hidden" name="conclusion" value="<?=$this->conclusion;?>">
-                            <a target="blank" href="/<?=$this->conclusion?>"><?=str_replace('uploads/', '', $this->conclusion);?></a>
-                        <?php endif; ?>
+                                <img class="delAttach" style="cursor: pointer;" width="15px" src="/img/Icon_delete.png" />
+                            </span>
+                        <?php endforeach; ?>
                     <?php endif; ?>
-                <?php elseif($element->getAttribute('type') == 'checkbox') : ?>
+                    <?php if (!empty($this->conclusions) && $element->getName() == 'conclusions[]') : ?>
+                        <?php foreach ($this->conclusions as $conclusion) : ?>
+                            <br>
+                            <span>
+                                <input type="hidden" name="oldConclusions[]" value="<?=$conclusion;?>">
+                                <a target="blank" href="/<?=$conclusion?>"><?=str_replace('uploads/', '', $conclusion);?></a>
+                                <img class="delAttach" style="cursor: pointer;" width="15px" src="/img/Icon_delete.png" />
+                            </span>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php elseif($element->getAttribute('type') == 'checkbox') :
+                    if ($disabled) $element->setAttribute('disabled', 'disabled');
+                    ?>
                     <span class="input-group-addon"><?=$element->getLabel();?>
                         <?php echo $this->formCheckbox($element);?>
                 </span>
                 <?php elseif($element->getAttribute('type') == 'textarea') : ?>
                     <span class="input-group-addon"><?=$element->getLabel();?></span>
-                    <textarea name="<?=$element->getAttribute('name')?>" class="form-control"><?php $value = $element->getValue(); echo !empty($value) ? $element->getValue() : '';?></textarea>
+                    <textarea <?=$disabled;?> name="<?=$element->getAttribute('name')?>" class="form-control"><?php $value = $element->getValue(); echo !empty($value) ? $element->getValue() : '';?></textarea>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
 
-        <button type="submit" class="btn btn-default">Сохранить</button>
-        <button type="reset" class="btn btn-default">Сброс</button>
-
+        <?php if (!$disabled) : ?>
+            <button type="submit" class="btn btn-default">Сохранить</button>
+            <button type="reset" class="btn btn-default">Сброс</button>
+        <?php endif; ?>
+        <button type="button" onClick="history.back();" class="btn btn-default">Назад</button>
     </form>
 
 <?php if(!empty($doctors)) : ?>

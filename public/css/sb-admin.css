@@ -243,3 +243,11 @@ ul.alert-dropdown {
     padding-right : 0px;
     padding-left: 5px;
 }
+
+.c-event-body, .c-event-item, .c-event-title {
+    display: none;
+}
+
+.input-group-addon {
+    min-width: 145px;
+}

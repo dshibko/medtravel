@@ -44,5 +44,8 @@ return array(
                 )
             )
         )
-    )
+    ),
+    'app' => array(
+        'uploads_path' => '/home/dmitry/public_html/zend.loc/public/uploads/',
+    ),
 );

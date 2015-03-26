@@ -203,14 +203,14 @@ class ClientsForm extends AbstractForm {
             'type'  => 'text',
             'attributes' => array(
                 'class' => '',
-                'placeholder' => 'Новая врач',
+                'placeholder' => 'Новый врач',
             ),
             'options' => array(
             ),
         ));
 
         $this->add(array(
-            'name' => 'conclusion',
+            'name' => 'conclusions[]',
             'type'  => 'Zend\Form\Element\File',
             'attributes' => array(
             ),

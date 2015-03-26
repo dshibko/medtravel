@@ -59,13 +59,15 @@
                 });
                 $('.c-previous').bind('click', bindCalendarEvents);
                 $('.c-next').bind('click', bindCalendarEvents);
-                $('.c-day.c-pad-top').bind('click', bindCalendarEvents);
                 bindCalendarEvents();
             }
 
             function bindCalendarEvents() {
                 $('.c-day.c-pad-top').bind('dblclick', function(e) {
-                    $('#fancybox').trigger('click');
+                    var href = $('#fancybox').attr('href');
+                    $('#fancybox').attr('href', $('#fancybox').attr('href') + '?date=' + $(this).data('date'));
+                    $('#fancybox').click();
+                    $('#fancybox').attr('href', href);
                 });
             }
         </script>

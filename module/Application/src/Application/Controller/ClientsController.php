@@ -35,6 +35,8 @@ class ClientsController extends AbstractActionController
     }
 
     public function editAction() {
+        $config = $this->getServiceLocator()->get('config');
+
         $applicationManager = ApplicationManager::getInstance($this->getServiceLocator());
         $doctors = $applicationManager->prepareFormDoctors();
 
@@ -52,6 +54,7 @@ class ClientsController extends AbstractActionController
         );
         $clientId = (int)$this->params()->fromRoute('id', '');
         $request = $this->getRequest();
+        $view = $request->getQuery()->view;
         $clientsDAO = ClientsDAO::getInstance($this->getServiceLocator());
         if (!empty($clientId)) {
             $editableClient = $clientsDAO->findOneById($clientId);
@@ -64,6 +67,11 @@ class ClientsController extends AbstractActionController
                 }
 
                 $conclusion = $editableClient->getConclusion();
+                if ($conclusion) {
+                    $conclusions = unserialize($conclusion);
+                } else {
+                    $conclusions = array();
+                }
                 if (!$request->isPost()) {
                     $clientData = array(
                         'fio' => $editableClient->getFio(),
@@ -126,22 +134,30 @@ class ClientsController extends AbstractActionController
                     foreach ($post['attachments'] as $attach) {
                         if (!empty($attach['name'])) {
                             $attach['name'] = str_replace(' ', '_', $attach['name']);
-                            move_uploaded_file($attach['tmp_name'], '/home/dmitry/public_html/zend.loc/public/uploads/'.$attach['name']);
+                            move_uploaded_file($attach['tmp_name'], $config['app']['uploads_path'].$attach['name']);
                             $attachmentNames[] = 'uploads/'.$attach['name'];
                         }
                     }
                 }
 
-                if (!empty($post['conclusion']['name'])) {
-                    $post['conclusion']['name'] = str_replace(' ', '_', $post['conclusion']['name']);
-                    move_uploaded_file($post['conclusion']['tmp_name'], '/home/dmitry/public_html/zend.loc/public/uploads/'.$post['conclusion']['name']);
-                    $conclusion = 'uploads/'.$post['conclusion']['name'];
+                if (!empty($post['conclusions'])) {
+                    foreach ($post['conclusions'] as $conclusion) {
+                        if (!empty($conclusion['name'])) {
+                            $conclusion['name'] = str_replace(' ', '_', $conclusion['name']);
+                            move_uploaded_file($conclusion['tmp_name'], $config['app']['uploads_path'].$conclusion['name']);
+                            $conclusionNames[] = 'uploads/'.$conclusion['name'];
+                        }
+                    }
                 } else {
-                    $conclusion = !empty($post['conclusion'][0]) ? $post['conclusion'][0] : '';
+                    $conclusionNames = array();
                 }
 
                 if (!empty($post['oldAttachments'])) {
                     $attachmentNames = !empty($attachmentNames) ? array_merge($attachmentNames, $post['oldAttachments']) : $post['oldAttachments'];
+                }
+
+                if (!empty($post['oldConclusions'])) {
+                    $conclusionNames = !empty($conclusionNames) ? array_merge($conclusionNames, $post['oldConclusions']) : $post['oldConclusions'];
                 }
 
                 $client = $editableClient;
@@ -154,10 +170,10 @@ class ClientsController extends AbstractActionController
                 $client->setComments($data['comments']);
                 $client->setCountry($data['country']);
                 $client->setContactType($data['contactType']);
-                $client->setAttachments(serialize($attachmentNames));
+                $client->setAttachments(serialize(array_unique($attachmentNames)));
                 $client->setClinic(ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']));
                 $client->setDoctor(DoctorDAO::getInstance($this->getServiceLocator())->findOneById($data['doctor']));
-                $client->setConclusion($conclusion);
+                $client->setConclusion(serialize(array_unique($conclusionNames)));
                 $client->setPayment($data['payment']);
                 $client->setInformed((int)$data['informed']);
 
@@ -171,10 +187,18 @@ class ClientsController extends AbstractActionController
                 }
             }
         }
-        return array('form' => $form, 'attachments' => $attachments, 'conclusion' => $conclusion, 'doctors' => $doctors);
+        return array(
+            'form' => $form,
+            'attachments' => $attachments,
+            'conclusions' => $conclusions,
+            'doctors' => $doctors,
+            'view' => $view
+        );
     }
 
     public function addAction() {
+        $config = $this->getServiceLocator()->get('config');
+
         $applicationManager = ApplicationManager::getInstance($this->getServiceLocator());
         $doctors = $applicationManager->prepareFormDoctors();
 
@@ -233,17 +257,22 @@ class ClientsController extends AbstractActionController
                     foreach ($post['attachments'] as $attach) {
                         if (!empty($attach['name'])) {
                             $attach['name'] = str_replace(' ', '_', $attach['name']);
-                            move_uploaded_file($attach['tmp_name'], '/home/dmitry/public_html/zend.loc/public/uploads/'.$attach['name']);
+                            move_uploaded_file($attach['tmp_name'], $config['app']['uploads_path'].$attach['name']);
                             $attachmentNames[] = 'uploads/'.$attach['name'];
                         }
                     }
                 }
 
-                $conclusion = '';
-                if (!empty($post['conclusion']['name'])) {
-                    $post['conclusion']['name'] = str_replace(' ', '_', $post['conclusion']['name']);
-                    move_uploaded_file($post['conclusion']['tmp_name'], '/home/dmitry/public_html/zend.loc/public/uploads/'.$post['conclusion']['name']);
-                    $conclusion = 'uploads/'.$post['conclusion']['name'];
+                if (!empty($post['conclusions'])) {
+                    foreach ($post['conclusions'] as $conclusion) {
+                        if (!empty($conclusion['name'])) {
+                            $conclusion['name'] = str_replace(' ', '_', $conclusion['name']);
+                            move_uploaded_file($conclusion['tmp_name'], $config['app']['uploads_path'].$conclusion['name']);
+                            $conclusionNames[] = 'uploads/'.$conclusion['name'];
+                        }
+                    }
+                } else {
+                    $conclusionNames = array();
                 }
 
                 $client = new Clients();
@@ -259,7 +288,7 @@ class ClientsController extends AbstractActionController
                 $client->setAttachments(serialize($attachmentNames));
                 $client->setClinic(ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']));
                 $client->setDoctor(DoctorDAO::getInstance($this->getServiceLocator())->findOneById($data['doctor']));
-                $client->setConclusion($conclusion);
+                $client->setConclusion(serialize(array_unique($conclusionNames)));
                 $client->setPayment($data['payment']);
                 $client->setInformed((int)$data['informed']);
                 $client->setDateAdded($now);

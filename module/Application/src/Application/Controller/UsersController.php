@@ -29,6 +29,7 @@ class UsersController extends AbstractActionController
         $form = new UserForm();
         $userId = (int)$this->params()->fromRoute('id', '');
         $request = $this->getRequest();
+        $view = $request->getQuery()->view;
         $userDAO = UserDAO::getInstance($this->getServiceLocator());
         if (!empty($userId)) {
             $editableUser = $userDAO->findOneById($userId);
@@ -74,7 +75,7 @@ class UsersController extends AbstractActionController
             $form->get('password')->setAttribute('type', 'password');
         }
 
-        return array('form' => $form);
+        return array('form' => $form, 'view' => $view);
     }
 
     public function addAction() {

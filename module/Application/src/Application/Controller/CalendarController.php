@@ -28,9 +28,12 @@ class CalendarController extends AbstractActionController
     }
 
     public function addAction() {
+
         $form = new CalendarForm();
         $request = $this->getRequest();
         $calendarDAO = CalendarDAO::getInstance($this->getServiceLocator());
+
+        $query = $request->getQuery();
 
         if ($request->isPost()) {
             $post = $request->getPost()->toArray();
@@ -58,6 +61,9 @@ class CalendarController extends AbstractActionController
             } else {
                 $form->getMessages();
             }
+        } elseif (!empty($query)) {
+            $date = $query->date;
+            $form->get('date')->setValue(date('d-M-Y', strtotime($date)));
         }
 
         $viewModel = new ViewModel(array(
@@ -69,7 +75,7 @@ class CalendarController extends AbstractActionController
     }
 
     public function removeAction() {
-        $eventId = (int)$this->params()->fromRoute('id', '');
+        $eventId = (int)$this->params()->fromRoute('data', '');
         CalendarDAO::getInstance($this->getServiceLocator())->removeById($eventId);
         die();
     }

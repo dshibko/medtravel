@@ -59,7 +59,7 @@ class AuthenticationManager extends BasicManager {
     public function signIn($identity, $remember = true)
     {
 		if ($remember){
-            $this->getAuthService()->getStorage()->setRememberMe(1, 691200);
+            $this->getAuthService()->getStorage()->setRememberMe(1, 10800);
         }
         $this->getAuthService()->getStorage()->write($identity);
     }

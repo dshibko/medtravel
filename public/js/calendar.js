@@ -32,23 +32,31 @@
         var mouseOverEvent = function () {
             $(this).addClass('c-event-over');
             var d = $(this).attr('data-event-day');
-            $('div.c-event-item[data-event-day="' + d + '"]').addClass('c-event-over');
+            //$('div.c-event-item[data-event-day="' + d + '"]').addClass('c-event-over');
         };
         var mouseLeaveEvent = function () {
-            $(this).removeClass('c-event-over')
+            $(this).removeClass('c-event-over');
             var d = $(this).attr('data-event-day');
             $('div.c-event-item[data-event-day="' + d + '"]').removeClass('c-event-over');
         };
         var mouseOverItem = function () {
-            $(this).addClass('c-event-over');
-            var d = $(this).attr('data-event-day');
-            $('div.c-event[data-event-day="' + d + '"]').addClass('c-event-over');
+            //$(this).addClass('c-event-over');
+            //var d = $(this).attr('data-event-day');
+            //$('div.c-event[data-event-day="' + d + '"]').addClass('c-event-over').show();
         };
         var mouseLeaveItem = function () {
-            $(this).removeClass('c-event-over')
-            var d = $(this).attr('data-event-day');
-            $('div.c-event[data-event-day="' + d + '"]').removeClass('c-event-over');
+            //$(this).removeClass('c-event-over');
+            //var d = $(this).attr('data-event-day');
+            //$('div.c-event[data-event-day="' + d + '"]').removeClass('c-event-over').hide();
         };
+        var mouseClickEvent = function () {
+            var d = $(this).attr('data-event-day');
+            $('.c-event-body').show();
+            $('.c-event-title').show();
+            $('.c-event-item').hide();
+            $('div.c-event-item[data-event-day="' + d + '"]').show();
+            $('div.c-event[data-event-day="' + d + '"]').addClass('c-event-over')
+        }
         var nextMonth = function () {
             if (dMonth < 11) {
                 dMonth++;
@@ -117,8 +125,10 @@
                     cDay.html(dLastDayOfPreviousMonth++);
                 } else if (day <= dLastDayOfMonth) {
                     cDay.addClass('c-day c-pad-top');
+                    cDay.attr('data-date', dYear+'-'+(dMonth+1 < 10 ? '0'+(dMonth+1) : (dMonth+1))+'-'+(day < 10 ? '0'+day : day));
                     if (day == dDay && adMonth == dMonth && adYear == dYear) {
                         cDay.addClass('c-today');
+
                     }
                     for (var j = 0; j < settings.events.length; j++) {
                         var d = settings.events[j].datetime;
@@ -129,6 +139,7 @@
                         if (d.getDate() == day && (d.getMonth()) == dMonth && d.getFullYear() == dYear) {
                             cDay.addClass('c-event').attr('data-event-day', d.getDate());
                             cDay.on('mouseover', mouseOverEvent).on('mouseleave', mouseLeaveEvent);
+                            cDay.on('click', mouseClickEvent)
                         }
                     }
                     cDay.html(day++);
@@ -148,8 +159,8 @@
                 if ((d.getMonth()) == dMonth && d.getFullYear() == dYear) {
                     var date = lpad(d.getDate(), 2) + '.' + lpad(d.getMonth()+1, 2);
                     var item = $('<div/>').addClass('c-event-item');
-                    var title = $('<div/>').addClass('title').html(date + '  ' + settings.events[i].title + '<br/>');
-                    var description = $('<div/>').addClass('description').html(settings.events[i].description + '<br/>');
+                    var title = $('<p/>').addClass('title').html(date + '  ' + settings.events[i].title + '<br/>');
+                    var description = $('<p/>').addClass('description').html(settings.events[i].description + '<br/>');
                     item.attr('data-event-day', d.getDate());
                     item.attr('id', settings.events[i].id);
 

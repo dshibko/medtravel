@@ -6,7 +6,7 @@ $form = $this->form;
 $form->setAttribute('action', $this->url('login',
     array('action'     => 'authenticate',)));
 
-
+$messages = $form->getMessages();
 $form->prepare();
 
 echo $this->form()->openTag($form);
@@ -14,7 +14,13 @@ $elements = $form->getElements();
 $inputs = array($elements['email'], $elements['password']);
 ?>
 <h3 class="form-signin-heading"><?php echo $this->escapeHtml($title); ?></h3>
-<?php print $this->renderMessages(true, true); ?>
+<?php if(isset($messages['email'])) : ?>
+    <div class="alert alert-danger">
+        <?php foreach ($messages['email'] as $error)
+            echo $error;
+        ?>
+    </div>
+<?php endif; ?>
 <?php foreach ($inputs as $input) : ?>
     <div class="control-group">
         <label class="sr-only"><?=$input->getLabel()?></label>

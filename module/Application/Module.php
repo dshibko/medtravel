@@ -37,14 +37,15 @@ class Module
             if ($route != 'login' && $matches != 'logout') {
                 try {
                     $user = ApplicationManager::getInstance($e->getApplication()->getServiceManager())->getCurrentUser();
-                    if ($user->getRole()->getId() == 2 && $route == 'users') {
-                        $this->redirect('dashboard', $e);
-                    }
                 } catch (\Exception $ex) {
                     $user = null;
                 }
                 if (!$user) {
                     $this->redirect('login', $e);
+                } else {
+                    if ($user->getRole()->getId() == 2 && $route == 'users') {
+                        $this->redirect('dashboard', $e);
+                    }
                 }
             }
         } else {
@@ -121,8 +122,20 @@ class Module
 
     private function redirect($route, \Zend\Mvc\MvcEvent $e)
     {
-        $e->getTarget()->plugin('redirect')->toRoute($route);
-        $e->stopPropagation();
-        return false;
+        $url = $e->getRouter()->assemble(array(), array('name' => $route));
+        $response=$e->getResponse();
+        $response->getHeaders()->addHeaderLine('Location', $url);
+        $response->setStatusCode(302);
+        $response->sendHeaders();
+        // When an MvcEvent Listener returns a Response object,
+        // It automatically short-circuit the Application running
+        // -> true only for Route Event propagation see Zend\Mvc\Application::run
+
+        // To avoid additional processing
+        // we can attach a listener for Event Route with a high priority
+        $stopCallBack = function($event) use ($response){
+            $event->stopPropagation();
+            return $response;
+        };
     }
 }
