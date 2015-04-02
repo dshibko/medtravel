@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6f84332c-9127-4ebd-a041-5f1cdc1de3bf" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module/Application/src/Application/Form/ClientsForm.php" afterPath="$PROJECT_DIR$/module/Application/src/Application/Form/ClientsForm.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/css/sb-admin.css" afterPath="$PROJECT_DIR$/public/css/sb-admin.css" />
     </list>
     <ignored path="zend.loc.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,16 +47,16 @@
       <file leaf-file-name="ClientsController.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Controller/ClientsController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4650">
+            <state line="39" column="21" selection-start="1319" selection-end="1319" vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="4410">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClientsForm.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ClientsForm.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Form/ClientsForm.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="148" column="41" selection-start="4518" selection-end="4518" vertical-scroll-proportion="-12.5" vertical-offset="1890" max-vertical-offset="3900">
+            <state line="104" column="24" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.53491825" vertical-offset="1170" max-vertical-offset="3915">
               <folding />
             </state>
           </provider>
@@ -99,10 +98,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sb-admin.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="sb-admin.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/css/sb-admin.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="251" column="18" selection-start="3744" selection-end="3744" vertical-scroll-proportion="0.85211265" vertical-offset="3160" max-vertical-offset="3870">
+            <state line="251" column="18" selection-start="3744" selection-end="3744" vertical-scroll-proportion="0.0" vertical-offset="3160" max-vertical-offset="3870">
               <folding />
             </state>
           </provider>
@@ -179,8 +178,8 @@
         <option value="$PROJECT_DIR$/public/index.php" />
         <option value="$PROJECT_DIR$/module/Application/view/application/clients/edit.phtml" />
         <option value="$PROJECT_DIR$/module/Application/src/Application/Controller/ClientsController.php" />
-        <option value="$PROJECT_DIR$/module/Application/src/Application/Form/ClientsForm.php" />
         <option value="$PROJECT_DIR$/public/css/sb-admin.css" />
+        <option value="$PROJECT_DIR$/module/Application/src/Application/Form/ClientsForm.php" />
       </list>
     </option>
   </component>
@@ -1119,13 +1118,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Controller/ClientsController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Entity/Clients.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="38" column="103" selection-start="900" selection-end="900" vertical-scroll-proportion="-20.0" vertical-offset="90" max-vertical-offset="6765">
@@ -1133,16 +1125,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Form/ClientsForm.php">
+    <entry file="file://$PROJECT_DIR$/public/css/sb-admin.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="148" column="41" selection-start="4518" selection-end="4518" vertical-scroll-proportion="-12.5" vertical-offset="1890" max-vertical-offset="3900">
+        <state line="251" column="18" selection-start="3744" selection-end="3744" vertical-scroll-proportion="0.0" vertical-offset="3160" max-vertical-offset="3870">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/css/sb-admin.css">
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Controller/ClientsController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="251" column="18" selection-start="3744" selection-end="3744" vertical-scroll-proportion="0.85211265" vertical-offset="3160" max-vertical-offset="3870">
+        <state line="39" column="21" selection-start="1319" selection-end="1319" vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="4410">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Form/ClientsForm.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="24" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.53491825" vertical-offset="1170" max-vertical-offset="3915">
           <folding />
         </state>
       </provider>
