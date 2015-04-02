@@ -146,7 +146,7 @@ class ClientsForm extends AbstractForm {
                 'minlength' => 6,
             ),
             'options' => array(
-                'label' => 'Следующий запланированный контакт',
+                'label' => 'Следующий<br>запланированный контакт',
             ),
         ));
 
