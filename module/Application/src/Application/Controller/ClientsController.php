@@ -28,7 +28,26 @@ class ClientsController extends AbstractActionController
         $clients = array();
         try {
             $clientsDAO = ClientsDAO::getInstance($this->getServiceLocator());
-            $clients = $clientsDAO->getAllClients();
+            $clients = $clientsDAO->getAllClients(true);
+
+            $statuses = array(
+                'Не обработан' => '#00C8FF',
+                'В работе' => '#FF2A00',
+                'Согласование' => '#F6FF00',
+                'Думает' => '#9EFFA1',
+                'Архив' => '#D6D6D6',
+                'Пролечен' => '#00FF08',
+                'Записан в календарь' => '#FFFFFF',
+            );
+            if (!empty($clients)) {
+                foreach ($clients as $key => $client) {
+                    foreach ($statuses as $status => $color) {
+                        if ($client['status'] == $status) {
+                            $clients[$key]['color'] = $color;
+                        }
+                    }
+                }
+            }
         } catch(\Exception $e) {}
 
         return array('clients' => $clients);
@@ -38,18 +57,11 @@ class ClientsController extends AbstractActionController
         $config = $this->getServiceLocator()->get('config');
 
         $applicationManager = ApplicationManager::getInstance($this->getServiceLocator());
-        $doctors = $applicationManager->prepareFormDoctors();
-
-        foreach ($doctors as $clinic) {
-            foreach ($clinic as $id=>$name) {
-                $formDoctors[$id] = $name;
-            }
-        }
 
         $form = new ClientsForm(
             array('services' => $applicationManager->prepareFormServices(),
                 'clinics' => $applicationManager->prepareFormClinics(),
-                'doctors' => $formDoctors
+                'doctors' => $applicationManager->prepareFormDoctors()
             )
         );
         $clientId = (int)$this->params()->fromRoute('id', '');
@@ -103,11 +115,7 @@ class ClientsController extends AbstractActionController
             );
 
             $form->setData($post);
-            if ($form->isValid() &&
-                (empty($post['newDoctor']) && empty($post['newClinic'])) ||
-                (!empty($post['newDoctor']) && empty($post['newClinic'])) ||
-                (!empty($post['newDoctor']) && !empty($post['newClinic']))
-            ) {
+            if ($form->isValid()) {
                 $data = $form->getData();
 
                 $dateTime = new \DateTime();
@@ -124,12 +132,10 @@ class ClientsController extends AbstractActionController
                 if (!empty($data['newDoctor'])) {
                     $newDoctor = new Doctor();
                     $newDoctor->setName($data['newDoctor']);
-                    $clinic = !empty($newClinic) ? $newClinic : ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']);
-                    $newDoctor->setClinic($clinic);
-                    DoctorDAO::getInstance($this->getServiceLocator())->save($newDoctor);
                     $data['doctor'] = $newDoctor->getId();
                 }
 
+                $attachmentNames = array();
                 if (!empty($post['attachments'])) {
                     foreach ($post['attachments'] as $attach) {
                         if (!empty($attach['name'])) {
@@ -140,6 +146,7 @@ class ClientsController extends AbstractActionController
                     }
                 }
 
+                $conclusionNames = array();
                 if (!empty($post['conclusions'])) {
                     foreach ($post['conclusions'] as $conclusion) {
                         if (!empty($conclusion['name'])) {
@@ -148,8 +155,6 @@ class ClientsController extends AbstractActionController
                             $conclusionNames[] = 'uploads/'.$conclusion['name'];
                         }
                     }
-                } else {
-                    $conclusionNames = array();
                 }
 
                 if (!empty($post['oldAttachments'])) {
@@ -179,19 +184,12 @@ class ClientsController extends AbstractActionController
 
                 $clientsDAO->save($client);
                 return $this->redirect()->toRoute('clients');
-            } else {
-                if (empty($post['newDoctor']) && !empty($post['newClinic'])) {
-                    $messages = $form->getMessages();
-                    $messages['clinic'] = array('Добавлена клиника, но не добавлен врач');
-                    $form->setMessages($messages);
-                }
             }
         }
         return array(
             'form' => $form,
             'attachments' => $attachments,
             'conclusions' => $conclusions,
-            'doctors' => $doctors,
             'view' => $view
         );
     }
@@ -200,18 +198,11 @@ class ClientsController extends AbstractActionController
         $config = $this->getServiceLocator()->get('config');
 
         $applicationManager = ApplicationManager::getInstance($this->getServiceLocator());
-        $doctors = $applicationManager->prepareFormDoctors();
-
-        foreach ($doctors as $clinic) {
-            foreach ($clinic as $id=>$name) {
-                $formDoctors[$id] = $name;
-            }
-        }
 
         $form = new ClientsForm(
             array('services' => $applicationManager->prepareFormServices(),
                   'clinics' => $applicationManager->prepareFormClinics(),
-                  'doctors' => $formDoctors
+                  'doctors' => $applicationManager->prepareFormDoctors()
             )
         );
 
@@ -224,11 +215,7 @@ class ClientsController extends AbstractActionController
 
             $form->setData($post);
 
-            if ($form->isValid() &&
-                (empty($post['newDoctor']) && empty($post['newClinic'])) ||
-                (!empty($post['newDoctor']) && empty($post['newClinic'])) ||
-                (!empty($post['newDoctor']) && !empty($post['newClinic']))
-            ) {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 $dateTime = new \DateTime();
 
@@ -247,8 +234,6 @@ class ClientsController extends AbstractActionController
                 if (!empty($data['newDoctor'])) {
                     $newDoctor = new Doctor();
                     $newDoctor->setName($data['newDoctor']);
-                    $clinic = !empty($newClinic) ? $newClinic : ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']);
-                    $newDoctor->setClinic($clinic);
                     DoctorDAO::getInstance($this->getServiceLocator())->save($newDoctor);
                     $data['doctor'] = $newDoctor->getId();
                 }
@@ -297,16 +282,10 @@ class ClientsController extends AbstractActionController
                 ClientsDAO::getInstance($this->getServiceLocator())->save($client);
 
                 return $this->redirect()->toRoute('clients');
-            } else {
-                if (empty($post['newDoctor']) && !empty($post['newClinic'])) {
-                    $messages = $form->getMessages();
-                    $messages['clinic'] = array('Добавлена клиника, но не добавлен врач');
-                    $form->setMessages($messages);
-                }
             }
         }
 
-        return array('form' => $form, 'doctors' => $doctors);
+        return array('form' => $form);
     }
 
     public function deleteAction() {

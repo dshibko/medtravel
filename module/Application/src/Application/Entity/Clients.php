@@ -36,7 +36,7 @@ class Clients {
     /** @ORM\Column(name="dos", type="datetime") */
     protected $dos;
 
-    /** @ORM\Column(name="status", type="string", columnDefinition="ENUM('Не обработан','В работе','Согласование','Архив','Пролечен','Записан в календарь','Сорвался')") */
+    /** @ORM\Column(name="status", type="string", columnDefinition="ENUM('Не обработан','В работе','Согласование','Думает','Архив','Пролечен','Записан в календарь')") */
     protected $status;
 
     /** @ORM\Column(name="comments", type="string") */

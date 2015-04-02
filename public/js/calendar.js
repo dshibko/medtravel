@@ -182,6 +182,7 @@
             $(instance).addClass('calendar');
             cEventsBody.append(eventList);
             $(instance).html(cBody).append(cEvents);
+            bindCalendarEvents();
         }
 
         return print();

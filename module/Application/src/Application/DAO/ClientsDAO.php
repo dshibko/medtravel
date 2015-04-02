@@ -69,11 +69,12 @@ class ClientsDAO extends AbstractDAO {
     public function getAllClients($hydrate = false)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('cli, c, d, s')
+        $qb->select('cli, c, d, s, m')
             ->from($this->getRepositoryName(), 'cli')
             ->join('cli.service', 's')
             ->join('cli.doctor', 'd')
             ->join('cli.clinic', 'c')
+            ->join('cli.manager', 'm')
             ->orderBy('cli.dos','ASC');
         return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
     }

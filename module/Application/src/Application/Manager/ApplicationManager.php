@@ -78,10 +78,10 @@ class ApplicationManager extends BasicManager {
     }
 
     public function prepareFormDoctors() {
-        $doctors = DoctorDAO::getInstance($this->getServiceLocator())->getDoctorsWithClinics();
+        $doctors = DoctorDAO::getInstance($this->getServiceLocator())->getAllDoctors();
         $result = array();
         foreach ($doctors as $doctor) {
-            $result[$doctor->getClinic()->getId()][$doctor->getId()] = $doctor->getName();
+            $result[$doctor->getId()] = $doctor->getName();
         }
 
         return $result;

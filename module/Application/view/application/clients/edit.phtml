@@ -17,19 +17,6 @@ $messages = $form->getMessages();
         $(document).ready(function() {
             $('.datepicker').datepick({dateFormat: 'dd-M-yyyy'});
 
-            $('select[name=clinic]').bind('change', function() {
-                var clinic = $('select[name=clinic] option:selected').val();
-                var doctorsElems = $('#doc-clinic-'+clinic).find('span');
-                var doctorId = $('select[name=doctor] option:selected').val();
-                $('select[name=doctor]').html('');
-                var options = '';
-                $.each(doctorsElems, function(key, val) {
-                    options += '<option '+($(val).data("id") == doctorId ? "selected" : "")+' value="'+$(val).data("id")+'">'+$(val).data("name")+'</option>';
-                });
-
-                $('select[name=doctor]').html(options);
-            });
-
             $('.add-attach').bind('click', function() {
                 var input = $(this).parent().find('input').first().clone();
                 $(this).before(input);
@@ -90,8 +77,8 @@ $messages = $form->getMessages();
                     <button type="button" class="btn btn-sm btn-link add-attach">Добавить</button>
                     <?php if (!empty($this->attachments) && $element->getName() != 'conclusions[]') : ?>
                         <?php foreach ($this->attachments as $attach) : ?>
-                            <br>
                             <span>
+                                <br>
                                 <input type="hidden" name="oldAttachments[]" value="<?=$attach;?>">
                                 <a target="blank" href="/<?=$attach?>"><?=str_replace('uploads/', '', $attach);?></a>
                                 <img class="delAttach" style="cursor: pointer;" width="15px" src="/img/Icon_delete.png" />
@@ -100,8 +87,8 @@ $messages = $form->getMessages();
                     <?php endif; ?>
                     <?php if (!empty($this->conclusions) && $element->getName() == 'conclusions[]') : ?>
                         <?php foreach ($this->conclusions as $conclusion) : ?>
-                            <br>
                             <span>
+                                <br>
                                 <input type="hidden" name="oldConclusions[]" value="<?=$conclusion;?>">
                                 <a target="blank" href="/<?=$conclusion?>"><?=str_replace('uploads/', '', $conclusion);?></a>
                                 <img class="delAttach" style="cursor: pointer;" width="15px" src="/img/Icon_delete.png" />

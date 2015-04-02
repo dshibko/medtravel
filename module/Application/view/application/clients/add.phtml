@@ -15,18 +15,6 @@ $messages = $form->getMessages();
     $(document).ready(function() {
         $('.datepicker').datepick({dateFormat: 'dd-M-yyyy'});
 
-        $('select[name=clinic]').bind('change', function() {
-            var clinic =  $('select[name=clinic] option:selected').val();
-            var doctorsElems = $('#doc-clinic-'+clinic).find('span');
-            $('select[name=doctor]').html('');
-            var options = '';
-            $.each(doctorsElems, function(key, val) {
-                 options += '<option value="'+$(val).data("id")+'">'+$(val).data("name")+'</option>';
-            });
-
-            $('select[name=doctor]').html(options);
-        });
-
         $('.add-attach').bind('click', function() {
             var input = $(this).parent().find('input').first().clone();
             $(this).before(input);

@@ -6,32 +6,32 @@
                 <thead>
                 <tr>
                     <th>ФИО</th>
-                    <th>Услуга</th>
-                    <th>Дата обращения</th>
                     <th>Статус</th>
+                    <th>Услуга</th>
+                    <th>След. заплан. контакт</th>
+                    <th>Дата обращения</th>
                     <th>Страна</th>
                     <th>Клиника</th>
                     <th>Врач</th>
                     <th>Менеджер</th>
-                    <th>Дата добавления</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($this->clients as $client) : ?>
-                        <tr>
-                            <td><?=$client->getFio(); ?></td>
-                            <td><?=$client->getService()->getName(); ?></td>
-                            <td><?=$client->getDOS()->format('d-M-Y'); ?></td>
-                            <td><?=$client->getStatus(); ?></td>
-                            <td><?=$client->getCountry(); ?></td>
-                            <td><?=$client->getClinic()->getName(); ?></td>
-                            <td><?=$client->getDoctor()->getName(); ?></td>
-                            <td><?=$client->getManager()->getDisplayName(); ?></td>
-                            <td><?=$client->getDateAdded()->format('d-M-Y'); ?></td>
+                        <tr style="background-color: <?=$client['color']?>">
+                            <td><?=$client['fio']; ?></td>
+                            <td><?=$client['status']; ?></td>
+                            <td><?=$client['service']['name']; ?></td>
+                            <td><?=$client['contactType']; ?></td>
+                            <td><?=$client['dos']->format('d-M-Y'); ?></td>
+                            <td><?=$client['country']; ?></td>
+                            <td><?=$client['clinic']['name']; ?></td>
+                            <td><?=$client['doctor']['name']; ?></td>
+                            <td><?=$client['manager']['displayName']; ?></td>
                             <td style="width: 40px;">
-                                <a href="/clients/edit/<?=$client->getId()?>"><img width="15px;" src="/img/edit.png"></a>
-                                <a href="/clients/edit/<?=$client->getId()?>?view=1"><img width="15px;" src="/img/view.png"></a>
+                                <a href="/clients/edit/<?=$client['id']?>"><img width="15px;" src="/img/edit.png"></a>
+                                <a href="/clients/edit/<?=$client['id']?>?view=1"><img width="15px;" src="/img/view.png"></a>
                                 <!--<br>
                                 <?php /*if ($this->getCurrentUser()->getId() != $user->getId()) : */?>
                                     <a href="/users/delete/<?/*=$user->getId()*/?>" onClick="return confirm('Подтвердите удаление пользователя')">

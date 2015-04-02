@@ -57,24 +57,4 @@ class DoctorDAO extends AbstractDAO {
         return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
     }
 
-    public function getDoctorsByClinic($clinicId, $hydrate = false)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('d')
-            ->from($this->getRepositoryName(), 'd')
-            ->where($qb->expr()->eq('d.clinic', ':clinicId'))->setParameter('clinic', $clinicId)
-            ->orderBy('d.id','ASC');
-        return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
-    }
-
-    public function getDoctorsWithClinics($hydrate = false)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('d, c')
-            ->from($this->getRepositoryName(), 'd')
-            ->join('d.clinic', 'c')
-            ->orderBy('d.id','ASC');
-        return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
-    }
-
 }

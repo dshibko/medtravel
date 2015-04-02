@@ -18,16 +18,6 @@ class Doctor {
     protected $name;
 
     /**
-     * @var Clinic
-     *
-     * @ORM\ManyToOne(targetEntity="Clinic")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="clinic_id", referencedColumnName="id")
-     * })
-     */
-    protected $clinic;
-
-    /**
      * Get id
      *
      * @return int
@@ -55,26 +45,4 @@ class Doctor {
         return $this->name;
     }
 
-    /**
-     * Set clinic
-     *
-     * @param \Application\Entity\Clinic $clinic
-     * @return Doctor
-     */
-    public function setClinic(Clinic $clinic = null)
-    {
-        $this->clinic = $clinic;
-
-        return $this;
-    }
-
-    /**
-     * Get clinic
-     *
-     * @return \Application\Entity\Clinic
-     */
-    public function getClinic()
-    {
-        return $this->clinic;
-    }
 }
