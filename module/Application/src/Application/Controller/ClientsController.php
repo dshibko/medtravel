@@ -8,7 +8,8 @@
  */
 
 namespace Application\Controller;
-
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
 use Application\DAO\ClientsDAO;
 use Application\DAO\ClinicDAO;
 use Application\DAO\CountryDAO;
@@ -88,6 +89,7 @@ class ClientsController extends AbstractActionController
                     $conclusions = array();
                 }
                 if (!$request->isPost()) {
+                    $contactType = $editableClient->getContactType();
                     $clientData = array(
                         'fio' => $editableClient->getFio(),
                         'diagnosis' => $editableClient->getDiagnosis(),
@@ -99,7 +101,7 @@ class ClientsController extends AbstractActionController
                         'status' => $editableClient->getStatus(),
                         'service' => $editableClient->getService()->getId(),
                         'comments' => $editableClient->getComments(),
-                        'contactType' => $editableClient->getContactType(),
+                        'contactType' => !empty($contactType) ? $contactType->format('d-M-Y') : '',
                         'payment' => $editableClient->getPayment(),
                         'informed' => $editableClient->getInformed(),
                     );
@@ -124,6 +126,14 @@ class ClientsController extends AbstractActionController
                 $dateTime = new \DateTime();
                 $dateTime->setTimestamp(strtotime($data['dos']));
                 $data['dos'] = $dateTime;
+
+                $dateTime = new \DateTime();
+                if (!empty($data['contactType'])) {
+                    $dateTime->setTimestamp(strtotime($data['contactType']));
+                    $data['contactType'] = $dateTime;
+                } else {
+                    $data['contactType'] = NULL;
+                }
 
                 if (!empty($data['newClinic'])) {
                     $newClinic = new Clinic();
@@ -230,9 +240,14 @@ class ClientsController extends AbstractActionController
             if ($form->isValid()) {
                 $data = $form->getData();
                 $dateTime = new \DateTime();
-
                 $dateTime->setTimestamp(strtotime($data['dos']));
                 $data['dos'] = $dateTime;
+
+                $dateTime = new \DateTime();
+                $dateTime->setTimestamp(strtotime($data['contactType']));
+                $data['contactType'] = $dateTime;
+
+                $dateTime = new \DateTime();
                 $dateTime->setTimestamp(time());
                 $now = $dateTime;
 

@@ -149,7 +149,7 @@ class ClientsForm extends AbstractForm {
             'name' => 'contactType',
             'type'  => 'text',
             'attributes' => array(
-                'class' => '',
+                'class' => 'datepicker',
                 'placeholder' => '',
                 'minlength' => 6,
             ),

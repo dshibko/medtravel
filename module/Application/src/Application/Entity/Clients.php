@@ -52,7 +52,7 @@ class Clients {
      */
     protected $country;
 
-    /** @ORM\Column(name="contact_type", type="string") */
+    /** @ORM\Column(name="contact_type", type="datetime") */
     protected $contactType;
 
     /** @ORM\Column(name="attachments", type="string") */
