@@ -10,7 +10,7 @@ class ClientsForm extends AbstractForm {
 
     private $selects;
 
-    public function __construct($selects = array('services' => array(), 'clinics' => array(), 'doctors' => array()), $name = null) {
+    public function __construct($selects = array('services' => array(), 'clinics' => array(), 'doctors' => array(), 'countries' => array()), $name = null) {
         parent::__construct();
 
         $this->setInputFilter(new ClientsInputFilter());
@@ -21,6 +21,7 @@ class ClientsForm extends AbstractForm {
         $this->selects['services'] = $selects['services'];
         $this->selects['clinics'] = $selects['clinics'];
         $this->selects['doctors'] = $selects['doctors'];
+        $this->selects['countries'] = $selects['countries'];
 
         $this->add(array(
             'name' => 'fio',
@@ -129,12 +130,18 @@ class ClientsForm extends AbstractForm {
             ),
             'options' => array(
                 'label' => 'Страна',
-                'value_options' => array(
-                    'Беларусь' => 'Беларусь',
-                    'Россия' => 'Россия',
-                    'Украина' => 'Украина',
-                    'Казахстан' => 'Казахстан'
-                )
+                'value_options' => $this->selects['countries']
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'newCountry',
+            'type'  => 'text',
+            'attributes' => array(
+                'class' => '',
+                'placeholder' => 'Новая клиника',
+            ),
+            'options' => array(
             ),
         ));
 
@@ -142,7 +149,7 @@ class ClientsForm extends AbstractForm {
             'name' => 'contactType',
             'type'  => 'text',
             'attributes' => array(
-                'class' => 'required',
+                'class' => '',
                 'placeholder' => '',
                 'minlength' => 6,
             ),

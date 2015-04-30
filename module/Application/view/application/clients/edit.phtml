@@ -10,6 +10,7 @@ $elements = $form->getElements();
 $inputs = $elements;//array($elements['displayName'], $elements['email'], $elements['password']);
 unset($inputs['newClinic']);
 unset($inputs['newDoctor']);
+unset($inputs['newCountry']);
 $errors  = $form->getInputFilter()->getMessages();
 $messages = $form->getMessages();
 ?>
@@ -70,6 +71,12 @@ $messages = $form->getMessages();
                                name="<?=$elements['newDoctor']->getAttribute('name')?>"
                                value="<?=$elements['newDoctor']->getValue();?>"
                                placeholder="<?=$elements['newDoctor']->getAttribute('placeholder');?>">
+                    <?php elseif ($element->getAttribute('name') == 'country' && !$disabled) :?>
+                        <input type="<?=$elements['newDoctor']->getAttribute('type');?>"
+                           class="form-control <?=$elements['newCountry']->getAttribute('class');?>"
+                           name="<?=$elements['newCountry']->getAttribute('name')?>"
+                           value="<?=$elements['newCountry']->getValue();?>"
+                           placeholder="<?=$elements['newCountry']->getAttribute('placeholder');?>">
                     <?php endif; ?>
                 <?php elseif($element->getAttribute('type') == 'file' && !$disabled) : ?>
                     <span class="input-group-addon"><?=$element->getLabel();?></span>

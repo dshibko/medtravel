@@ -3,6 +3,7 @@
 namespace Application\Manager;
 
 use Application\DAO\ClinicDAO;
+use Application\DAO\CountryDAO;
 use Application\DAO\DoctorDAO;
 use Application\DAO\ServiceDAO;
 use \Application\Entity\User;
@@ -58,20 +59,20 @@ class ApplicationManager extends BasicManager {
     }
 
     public function prepareFormServices() {
-        $services = ServiceDAO::getInstance($this->getServiceLocator())->getAllServices(true);
+        $services = ServiceDAO::getInstance($this->getServiceLocator())->getAllServices();
         $result = array();
         foreach ($services as $service) {
-            $result[$service['id']] = $service['name'];
+            $result[$service->getId()] = $service->getName();
         }
 
         return $result;
     }
 
     public function prepareFormClinics() {
-        $clinics = ClinicDAO::getInstance($this->getServiceLocator())->getAllClinics(true);
+        $clinics = ClinicDAO::getInstance($this->getServiceLocator())->getAllClinics();
         $result = array();
         foreach ($clinics as $clinic) {
-            $result[$clinic['id']] = $clinic['name'];
+            $result[$clinic->getId()] = $clinic->getName();
         }
 
         return $result;
@@ -82,6 +83,16 @@ class ApplicationManager extends BasicManager {
         $result = array();
         foreach ($doctors as $doctor) {
             $result[$doctor->getId()] = $doctor->getName();
+        }
+
+        return $result;
+    }
+
+    public function prepareFormCountries() {
+        $countries = CountryDAO::getInstance($this->getServiceLocator())->getAllCountries();
+        $result = array();
+        foreach ($countries as $country) {
+            $result[$country->getId()] = $country->getName();
         }
 
         return $result;

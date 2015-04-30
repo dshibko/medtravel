@@ -11,10 +11,12 @@ namespace Application\Controller;
 
 use Application\DAO\ClientsDAO;
 use Application\DAO\ClinicDAO;
+use Application\DAO\CountryDAO;
 use Application\DAO\DoctorDAO;
 use Application\DAO\ServiceDAO;
 use Application\DAO\UserDAO;
 use Application\Entity\Clients;
+use Application\Entity\Country;
 use Application\Entity\Doctor;
 use Application\Entity\Clinic;
 use Application\Form\ClientsForm;
@@ -61,7 +63,8 @@ class ClientsController extends AbstractActionController
         $form = new ClientsForm(
             array('services' => $applicationManager->prepareFormServices(),
                 'clinics' => $applicationManager->prepareFormClinics(),
-                'doctors' => $applicationManager->prepareFormDoctors()
+                'doctors' => $applicationManager->prepareFormDoctors(),
+                'countries' => $applicationManager->prepareFormCountries()
             )
         );
         $clientId = (int)$this->params()->fromRoute('id', '');
@@ -92,7 +95,7 @@ class ClientsController extends AbstractActionController
                         'dos' => $editableClient->getDOS()->format('d-M-Y'),
                         'clinic' => $editableClient->getClinic()->getId(),
                         'doctor' => $editableClient->getDoctor()->getId(),
-                        'country' => $editableClient->getCountry(),
+                        'country' => $editableClient->getCountry()->getID(),
                         'status' => $editableClient->getStatus(),
                         'service' => $editableClient->getService()->getId(),
                         'comments' => $editableClient->getComments(),
@@ -132,7 +135,15 @@ class ClientsController extends AbstractActionController
                 if (!empty($data['newDoctor'])) {
                     $newDoctor = new Doctor();
                     $newDoctor->setName($data['newDoctor']);
+                    DoctorDAO::getInstance($this->getServiceLocator())->save($newDoctor);
                     $data['doctor'] = $newDoctor->getId();
+                }
+
+                if (!empty($data['newCountry'])) {
+                    $newCountry = new Country();
+                    $newCountry->setName($data['newCountry']);
+                    CountryDAO::getInstance($this->getServiceLocator())->save($newCountry);
+                    $data['country'] = $newCountry->getId();
                 }
 
                 $attachmentNames = array();
@@ -173,7 +184,7 @@ class ClientsController extends AbstractActionController
                 $client->setDOS($data['dos']);
                 $client->setStatus($data['status']);
                 $client->setComments($data['comments']);
-                $client->setCountry($data['country']);
+                $client->setCountry(CountryDAO::getInstance($this->getServiceLocator())->findOneById($data['country']));
                 $client->setContactType($data['contactType']);
                 $client->setAttachments(serialize(array_unique($attachmentNames)));
                 $client->setClinic(ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']));
@@ -202,7 +213,8 @@ class ClientsController extends AbstractActionController
         $form = new ClientsForm(
             array('services' => $applicationManager->prepareFormServices(),
                   'clinics' => $applicationManager->prepareFormClinics(),
-                  'doctors' => $applicationManager->prepareFormDoctors()
+                  'doctors' => $applicationManager->prepareFormDoctors(),
+                  'countries' => $applicationManager->prepareFormCountries()
             )
         );
 
@@ -238,6 +250,13 @@ class ClientsController extends AbstractActionController
                     $data['doctor'] = $newDoctor->getId();
                 }
 
+                if (!empty($data['newCountry'])) {
+                    $newCountry = new Country();
+                    $newCountry->setName($data['newCountry']);
+                    CountryDAO::getInstance($this->getServiceLocator())->save($newCountry);
+                    $data['country'] = $newDoctor->getId();
+                }
+
                 if (!empty($post['attachments'])) {
                     foreach ($post['attachments'] as $attach) {
                         if (!empty($attach['name'])) {
@@ -268,7 +287,7 @@ class ClientsController extends AbstractActionController
                 $client->setDOS($data['dos']);
                 $client->setStatus($data['status']);
                 $client->setComments($data['comments']);
-                $client->setCountry($data['country']);
+                $client->setCountry(CountryDAO::getInstance($this->getServiceLocator())->findOneById($data['country']));
                 $client->setContactType($data['contactType']);
                 $client->setAttachments(serialize($attachmentNames));
                 $client->setClinic(ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']));

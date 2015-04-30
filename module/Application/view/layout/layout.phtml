@@ -39,7 +39,9 @@
 
         <script type="text/javascript">
             $(document).ready(function() {
-                $('.table').dataTable();
+                $('.table').dataTable({
+                    "pageLength": 50
+                });
                 initCalendar();
 
                 $('#fancybox').fancybox({

@@ -1,5 +1,10 @@
 <div class="">
     <h1 class="page-header">Клиенты</h1>
+    <a href="/clients/add">
+        <button type="button" class="btn btn-lg btn-primary">Добавить клиента</button>
+    </a>
+    <br>
+    <br>
     <div class="table-responsive">
         <?php if (!empty($this->clients)) : ?>
             <table class="table table-hover table-striped table-bordered">
@@ -12,7 +17,7 @@
                     <th>Дата обращения</th>
                     <th>Страна</th>
                     <th>Клиника</th>
-                    <th>Врач</th>
+                    <th>Контакты</th>
                     <th>Менеджер</th>
                     <th></th>
                 </tr>
@@ -25,9 +30,9 @@
                             <td><?=$client['service']['name']; ?></td>
                             <td><?=$client['contactType']; ?></td>
                             <td><?=$client['dos']->format('d-M-Y'); ?></td>
-                            <td><?=$client['country']; ?></td>
+                            <td><?=$client['country']['name']; ?></td>
                             <td><?=$client['clinic']['name']; ?></td>
-                            <td><?=$client['doctor']['name']; ?></td>
+                            <td><?=$client['contacts']; ?></td>
                             <td><?=$client['manager']['displayName']; ?></td>
                             <td style="width: 40px;">
                                 <a href="/clients/edit/<?=$client['id']?>"><img width="15px;" src="/img/edit.png"></a>
@@ -44,8 +49,5 @@
                 </tbody>
             </table>
         <?php else : echo 'Нет клиентов<br>'; endif; ?>
-        <a href="/clients/add">
-            <button type="button" class="btn btn-lg btn-primary">Добавить клиента</button>
-        </a>
     </div>
 </div>

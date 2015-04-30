@@ -41,11 +41,12 @@ class ClientsDAO extends AbstractDAO {
      */
     public function findOneById($id, $hydrate = false) {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('cli, c, d, s')
+        $qb->select('cli, c, d, s, co')
             ->from($this->getRepositoryName(), 'cli')
             ->join('cli.service', 's')
             ->join('cli.doctor', 'd')
             ->join('cli.clinic', 'c')
+            ->join('cli.country', 'co')
             ->where('cli.id = :id')
             ->setParameter('id', $id)
             ->orderBy('cli.dos','ASC');
@@ -56,11 +57,12 @@ class ClientsDAO extends AbstractDAO {
     public function getClientsByManager($managerId, $hydrate = false)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('cli, c, d, s')
+        $qb->select('cli, c, d, s, co')
             ->from($this->getRepositoryName(), 'cli')
             ->join('cli.service', 's')
             ->join('cli.doctor', 'd')
             ->join('cli.clinic', 'c')
+            ->join('cli.country', 'co')
             ->where($qb->expr()->eq('cli.manager',':managerId'))->setParameter('managerId', $managerId)
             ->orderBy('cli.dos','ASC');
         return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
@@ -69,12 +71,13 @@ class ClientsDAO extends AbstractDAO {
     public function getAllClients($hydrate = false)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('cli, c, d, s, m')
+        $qb->select('cli, c, d, s, m, co')
             ->from($this->getRepositoryName(), 'cli')
             ->join('cli.service', 's')
             ->join('cli.doctor', 'd')
             ->join('cli.clinic', 'c')
             ->join('cli.manager', 'm')
+            ->join('cli.country', 'co')
             ->orderBy('cli.dos','ASC');
         return $qb->getQuery()->getResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
     }

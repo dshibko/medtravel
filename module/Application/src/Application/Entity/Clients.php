@@ -42,7 +42,14 @@ class Clients {
     /** @ORM\Column(name="comments", type="string") */
     protected $comments;
 
-    /** @ORM\Column(name="country", type="string") */
+    /**
+     * @var Country
+     *
+     * @ORM\ManyToOne(targetEntity="Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * })
+     */
     protected $country;
 
     /** @ORM\Column(name="contact_type", type="string") */
@@ -245,7 +252,7 @@ class Clients {
     /**
      * Set country
      *
-     * @param string $country
+     * @param \Application\Entity\Country $country
      */
     public function setCountry($country)
     {
@@ -254,7 +261,7 @@ class Clients {
     /**
      * Get country
      *
-     * @return string
+     * @return \Application\Entity\Country
      */
     public function getCountry()
     {

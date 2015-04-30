@@ -108,22 +108,6 @@ class ClientsInputFilter extends InputFilter
         )));
 
         $this->add($factory->createInput(array(
-            'name'     => 'contactType',
-            'required' => true,
-            'validators' => array(
-                array(
-                    'break_chain_on_failure' => true,
-                    'name' => 'NotEmpty',
-                    'options' => array(
-                        'messages' => array(
-                            \Zend\Validator\NotEmpty::IS_EMPTY => 'Обязательное поле',
-                        ),
-                    ),
-                ),
-            )
-        )));
-
-        $this->add($factory->createInput(array(
             'name'     => 'conclusion',
             'required' => false,
             'validators' => array(
