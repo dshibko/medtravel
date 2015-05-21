@@ -28,7 +28,7 @@
                             <td><?=$client['fio']; ?></td>
                             <td><?=$client['status']; ?></td>
                             <td><?=$client['service']['name']; ?></td>
-                            <td><?=!empty($client['contactType']) ? $client['contactType']->format('d-M-Y') : 'Нет'; ?></td>
+                            <td><?=!empty($client['nextContactDate']) ? $client['nextContactDate']->format('d-M-Y') : 'Нет'; ?></td>
                             <td><?=$client['dos']->format('d-M-Y'); ?></td>
                             <td><?=$client['country']['name']; ?></td>
                             <td><?=$client['clinic']['name']; ?></td>

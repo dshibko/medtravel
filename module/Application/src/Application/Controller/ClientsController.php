@@ -10,12 +10,14 @@
 namespace Application\Controller;
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
+use Application\DAO\CalendarDAO;
 use Application\DAO\ClientsDAO;
 use Application\DAO\ClinicDAO;
 use Application\DAO\CountryDAO;
 use Application\DAO\DoctorDAO;
 use Application\DAO\ServiceDAO;
 use Application\DAO\UserDAO;
+use Application\Entity\Calendar;
 use Application\Entity\Clients;
 use Application\Entity\Country;
 use Application\Entity\Doctor;
@@ -89,7 +91,7 @@ class ClientsController extends AbstractActionController
                     $conclusions = array();
                 }
                 if (!$request->isPost()) {
-                    $contactType = $editableClient->getContactType();
+                    $nextContactDate = $editableClient->getNextContactDate();
                     $clientData = array(
                         'fio' => $editableClient->getFio(),
                         'diagnosis' => $editableClient->getDiagnosis(),
@@ -101,7 +103,8 @@ class ClientsController extends AbstractActionController
                         'status' => $editableClient->getStatus(),
                         'service' => $editableClient->getService()->getId(),
                         'comments' => $editableClient->getComments(),
-                        'contactType' => !empty($contactType) ? $contactType->format('d-M-Y') : '',
+                        'nextContactDate' => !empty($nextContactDate) ? $nextContactDate->format('d-M-Y') : '',
+                        'nextContactComment' => $editableClient->getNextContactComment(),
                         'payment' => $editableClient->getPayment(),
                         'informed' => $editableClient->getInformed(),
                     );
@@ -128,11 +131,22 @@ class ClientsController extends AbstractActionController
                 $data['dos'] = $dateTime;
 
                 $dateTime = new \DateTime();
-                if (!empty($data['contactType'])) {
-                    $dateTime->setTimestamp(strtotime($data['contactType']));
-                    $data['contactType'] = $dateTime;
+                if (!empty($data['nextContactDate'])) {
+                    $dateTime->setTimestamp(strtotime($data['nextContactDate']));
+                    $data['nextContactDate'] = $dateTime;
+
+                    $calendarDAO = CalendarDAO::getInstance($this->getServiceLocator());
+                    $event = $calendarDAO->getEventByClientId($editableClient->getId());
+                    if (empty($event)) {
+                        $event = new Calendar();
+                    }
+                    $event->setTitle($data['fio']);
+                    $event->setDescription($data['nextContactComment']);
+                    $event->setDate($dateTime);
+                    $event->setClient($editableClient);
+                    $calendarDAO->save($event);
                 } else {
-                    $data['contactType'] = NULL;
+                    $data['nextContactDate'] = NULL;
                 }
 
                 if (!empty($data['newClinic'])) {
@@ -195,7 +209,8 @@ class ClientsController extends AbstractActionController
                 $client->setStatus($data['status']);
                 $client->setComments($data['comments']);
                 $client->setCountry(CountryDAO::getInstance($this->getServiceLocator())->findOneById($data['country']));
-                $client->setContactType($data['contactType']);
+                $client->setNextContactDate($data['nextContactDate']);
+                $client->setNextContactComment($data['nextContactComment']);
                 $client->setAttachments(serialize(array_unique($attachmentNames)));
                 $client->setClinic(ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']));
                 $client->setDoctor(DoctorDAO::getInstance($this->getServiceLocator())->findOneById($data['doctor']));
@@ -244,8 +259,8 @@ class ClientsController extends AbstractActionController
                 $data['dos'] = $dateTime;
 
                 $dateTime = new \DateTime();
-                $dateTime->setTimestamp(strtotime($data['contactType']));
-                $data['contactType'] = $dateTime;
+                $dateTime->setTimestamp(strtotime($data['nextContactDate']));
+                $data['nextContactDate'] = $dateTime;
 
                 $dateTime = new \DateTime();
                 $dateTime->setTimestamp(time());
@@ -303,7 +318,8 @@ class ClientsController extends AbstractActionController
                 $client->setStatus($data['status']);
                 $client->setComments($data['comments']);
                 $client->setCountry(CountryDAO::getInstance($this->getServiceLocator())->findOneById($data['country']));
-                $client->setContactType($data['contactType']);
+                $client->setNextContactDate($data['nextContactDate']);
+                $client->setNextContactComment($data['nextContactComment']);
                 $client->setAttachments(serialize($attachmentNames));
                 $client->setClinic(ClinicDAO::getInstance($this->getServiceLocator())->findOneById($data['clinic']));
                 $client->setDoctor(DoctorDAO::getInstance($this->getServiceLocator())->findOneById($data['doctor']));
@@ -314,6 +330,16 @@ class ClientsController extends AbstractActionController
                 $client->setManager($applicationManager->getCurrentUser());
 
                 ClientsDAO::getInstance($this->getServiceLocator())->save($client);
+
+                if (!empty($data['nextContactDate'])) {
+                    $calendarDAO = CalendarDAO::getInstance($this->getServiceLocator());
+                    $event = new Calendar();
+                    $event->setTitle($data['fio']);
+                    $event->setDescription($client->getNextContactComment());
+                    $event->setDate($client->getNextContactDate());
+                    $event->setClient($client);
+                    $calendarDAO->save($event);
+                }
 
                 return $this->redirect()->toRoute('clients');
             }

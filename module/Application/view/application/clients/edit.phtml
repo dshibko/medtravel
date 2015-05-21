@@ -47,13 +47,25 @@ $messages = $form->getMessages();
                 </div>
             <?php endif; ?>
             <div class="form-group input-group">
-                <?php if($element->getAttribute('type') == 'text') : ?>
+                <?php if($element->getAttribute('type') == 'text' && !in_array($element->getAttribute('name'), array('nextContactDate', 'nextContactComment'))) : ?>
                     <span class="input-group-addon"><?=$element->getLabel()?></span>
                     <input type="<?=$element->getAttribute('type');?>"
                            class="form-control <?=$element->getAttribute('class');?>"
                            name="<?=$element->getAttribute('name')?>"
                            value="<?=$element->getValue();?>"
                         <?=$disabled;?>>
+                <?php elseif ($element->getAttribute('name') == 'nextContactDate') :?>
+                    <span class="input-group-addon"><?=$element->getLabel()?></span>
+                    <input type="<?=$element->getAttribute('type');?>"
+                           class="form-control <?=$element->getAttribute('class');?>"
+                           name="<?=$element->getAttribute('name')?>"
+                           value="<?=$element->getValue();?>"
+                        <?=$disabled;?>>
+                    <input type="<?=$elements['nextContactComment']->getAttribute('type');?>"
+                           class="form-control <?=$elements['nextContactComment']->getAttribute('class');?>"
+                           name="<?=$elements['nextContactComment']->getAttribute('name')?>"
+                           value="<?=$elements['nextContactComment']->getValue();?>"
+                           placeholder="<?=$elements['nextContactComment']->getAttribute('placeholder');?>">
                 <?php elseif($element->getAttribute('type') == 'select') :
                     if ($disabled) $element->setAttribute('disabled', 'disabled');
                     ?>

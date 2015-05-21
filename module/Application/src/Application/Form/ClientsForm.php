@@ -139,22 +139,34 @@ class ClientsForm extends AbstractForm {
             'type'  => 'text',
             'attributes' => array(
                 'class' => '',
-                'placeholder' => 'Новая клиника',
+                'placeholder' => 'Новая страна',
             ),
             'options' => array(
             ),
         ));
 
         $this->add(array(
-            'name' => 'contactType',
+            'name' => 'nextContactDate',
             'type'  => 'text',
             'attributes' => array(
                 'class' => 'datepicker',
                 'placeholder' => '',
                 'minlength' => 6,
+                'placeholder' => 'Дата',
             ),
             'options' => array(
                 'label' => 'Следующий<br>запланированный контакт',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'nextContactComment',
+            'type'  => 'text',
+            'attributes' => array(
+                'class' => '',
+                'placeholder' => 'Комментарий',
+            ),
+            'options' => array(
             ),
         ));
 

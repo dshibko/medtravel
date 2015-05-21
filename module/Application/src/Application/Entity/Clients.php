@@ -52,8 +52,11 @@ class Clients {
      */
     protected $country;
 
-    /** @ORM\Column(name="contact_type", type="datetime") */
-    protected $contactType;
+    /** @ORM\Column(name="next_contact_Date", type="datetime") */
+    protected $nextContactDate;
+
+    /** @ORM\Column(name="next_contact_comment", type="string") */
+    protected $nextContactComment;
 
     /** @ORM\Column(name="attachments", type="string") */
     protected $attachments;
@@ -269,22 +272,41 @@ class Clients {
     }
 
     /**
-     * Set contactType
+     * Set nextContactDate
      *
-     * @param string $contactType
+     * @param string $nextContactDate
      */
-    public function setContactType($contactType)
+    public function setNextContactDate($nextContactDate)
     {
-        $this->contactType = $contactType;
+        $this->nextContactDate = $nextContactDate;
     }
     /**
-     * Get contactType
+     * Get nextContactDate
      *
      * @return string
      */
-    public function getContactType()
+    public function getNextContactDate()
     {
-        return $this->contactType;
+        return $this->nextContactDate;
+    }
+
+    /**
+     * Set nextContactComment
+     *
+     * @param string $nextContactComment
+     */
+    public function setNextContactComment($nextContactComment)
+    {
+        $this->nextContactComment = $nextContactComment;
+    }
+    /**
+     * Get nextContactComment
+     *
+     * @return string
+     */
+    public function getNextContactComment()
+    {
+        return $this->nextContactComment;
     }
 
     /**

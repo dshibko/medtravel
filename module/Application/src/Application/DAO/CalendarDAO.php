@@ -48,6 +48,15 @@ class CalendarDAO extends AbstractDAO {
         return $qb->getQuery()->getOneOrNullResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
     }
 
+    public function getEventByClientId($clientId, $hydrate = false) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
+            ->from($this->getRepositoryName(), 'c')
+            ->where('c.client = :clientId')
+            ->setParameter('clientId', $clientId);
+        return $qb->getQuery()->getOneOrNullResult($hydrate ? \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY : null);
+    }
+
     public function getAllEvents($hydrate = false)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
